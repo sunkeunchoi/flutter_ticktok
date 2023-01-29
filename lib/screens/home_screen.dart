@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/gaps.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -10,9 +12,12 @@ class HomeScreen extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
         ),
-        height: 200,
-        width: 200,
-        child: const Text("Home Screen"),
+        child: Column(
+          children: const [
+            Gaps.v96,
+            Text("Home Screen"),
+          ],
+        ),
       ),
     );
   }
