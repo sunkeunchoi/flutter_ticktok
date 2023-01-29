@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'screens/home_screen.dart';
+import 'package:flutter_ticktoc/screens/auth/signup_screen.dart';
 
 void main() {
   runApp(const App());
@@ -17,7 +16,7 @@ class App extends StatelessWidget {
         useMaterial3: true,
         primaryColor: const Color(0xFFE9435A),
       ),
-      home: const HomeScreen(),
+      home: const SignUpScreen(),
     );
   }
 }
