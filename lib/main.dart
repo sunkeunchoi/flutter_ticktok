@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/authentication/signup_screen.dart';
 
 void main() {
@@ -14,6 +15,16 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+            foregroundColor: Colors.black,
+            elevation: 0,
+            backgroundColor: Colors.white,
+            titleTextStyle: TextStyle(
+              color: Colors.black,
+              fontSize: Sizes.size16 + Sizes.size02,
+              fontWeight: FontWeight.w600,
+            )),
         primaryColor: const Color(0xFFE9435A),
       ),
       home: const SignUpScreen(),
