@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/authentication/widgets/form_button.dart';
+import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
 
 class LoginFormScreen extends StatefulWidget {
   const LoginFormScreen({super.key});
@@ -14,10 +15,12 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
   String? _emailValidator(String? value) {
+    if (value == null || value.isEmpty) return "Please write your email";
     return null;
   }
 
   String? _passwordValidator(String? value) {
+    if (value == null || value.isEmpty) return "Please write your password";
     return null;
   }
 
@@ -36,6 +39,11 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
       return;
     }
     _formKey.currentState!.save();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const InterestsScreen(),
+      ),
+    );
   }
 
   @override
