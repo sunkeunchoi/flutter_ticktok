@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
+import 'package:flutter_ticktoc/features/authentication/login_form_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'username_screen.dart';
 import 'widgets/auth_button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
 
   void onEmailTap(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const UsernameScreen()));
+        .push(MaterialPageRoute(builder: (context) => const LoginFormScreen()));
   }
 
   @override
