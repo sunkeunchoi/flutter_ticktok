@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 
+import 'tutorial_screen.dart';
 import 'widgets/interest_button.dart';
 
 const interests = [
@@ -56,6 +57,14 @@ class _InterestsScreenState extends State<InterestsScreen> {
     });
   }
 
+  void _onNextTap() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const TutorialScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,25 +82,31 @@ class _InterestsScreenState extends State<InterestsScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         surfaceTintColor: Colors.white,
-        height: Sizes.size96,
+        height: 120,
         elevation: 2,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size20,
-            vertical: Sizes.size08,
+            horizontal: Sizes.size02,
+            vertical: Sizes.size02,
           ),
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: const Text(
-              "Next",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Sizes.size16,
+          child: GestureDetector(
+            onTap: _onNextTap,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(
+                  Sizes.size05,
+                ),
               ),
-              textAlign: TextAlign.center,
+              child: const Text(
+                "Next",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Sizes.size16,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),
@@ -103,8 +118,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(
-                left: Sizes.size10,
-                right: Sizes.size10,
+                left: Sizes.size24,
+                right: Sizes.size24,
                 bottom: Sizes.size24,
               ),
               child: Column(
