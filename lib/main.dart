@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
+import 'package:flutter_ticktoc/features/onboarding/tutorial_screen.dart';
 
 void main() {
   runApp(const App());
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
         primaryColor: const Color(0xFFE9435A),
       ),
       // home: const SignUpScreen(),
-      home: const InterestsScreen(),
+      home: const TutorialScreen(),
     );
   }
 }

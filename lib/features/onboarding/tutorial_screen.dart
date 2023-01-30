@@ -17,7 +17,7 @@ enum Pages { first, second }
 class _TutorialScreenState extends State<TutorialScreen> {
   Direction _direction = Direction.right;
   Pages _showingPage = Pages.first;
-
+  final Duration _duration = const Duration(milliseconds: 500);
   void _onPanUpdate(DragUpdateDetails details) {
     var current = details.delta.dx > 0 ? Direction.right : Direction.left;
     if (current == _direction) return;
@@ -47,7 +47,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               crossFadeState: _showingPage == Pages.first
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
-              duration: const Duration(microseconds: 3000),
+              duration: _duration,
               firstChild: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
@@ -100,9 +100,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               vertical: Sizes.size10,
             ),
             child: AnimatedOpacity(
-              duration: const Duration(
-                microseconds: 300,
-              ),
+              duration: _duration,
               opacity: _showingPage == Pages.first ? 0 : 1,
               child: CupertinoButton(
                 onPressed: () {},
