@@ -47,58 +47,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
       ),
       body: screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTap,
-        selectedItemColor: Theme.of(context).primaryColor,
-        type: BottomNavigationBarType.shifting,
-        items: const [
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onTap,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        destinations: const [
+          NavigationDestination(
             icon: FaIcon(
               FontAwesomeIcons.house,
+              color: Colors.teal,
             ),
             label: "Home",
-            tooltip: "What are you?",
-            backgroundColor: Colors.amber,
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: FaIcon(
               FontAwesomeIcons.magnifyingGlass,
+              color: Colors.yellow,
             ),
             label: "Search",
-            tooltip: "What are you?",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.gear,
-              ),
-              label: "Settings",
-              tooltip: "What are you?",
-              backgroundColor: Colors.brown),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.house,
-            ),
-            label: "Home2",
-            tooltip: "What are you?",
-            backgroundColor: Colors.deepOrange,
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.magnifyingGlass,
-            ),
-            label: "Search2",
-            tooltip: "What are you?",
-            backgroundColor: Colors.deepPurple,
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(
-              FontAwesomeIcons.gear,
-            ),
-            label: "Settings2",
-            tooltip: "What are you?",
-            backgroundColor: Colors.green,
           ),
         ],
       ),
