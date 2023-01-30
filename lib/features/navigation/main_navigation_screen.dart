@@ -1,25 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const screens = [
-  Center(
-    child: Text("Home"),
-  ),
-  Center(
-    child: Text("Search"),
-  ),
-  Center(
-    child: Text("Settings"),
-  ),
-  Center(
-    child: Text("Home2"),
-  ),
-  Center(
-    child: Text("Search2"),
-  ),
-  Center(
-    child: Text("Settings2"),
-  ),
-];
+import 'widgets/nav_tap.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -39,24 +21,78 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.home,
+    return Scaffold(
+      body: Stack(
+        children: [
+          Offstage(
+            offstage: _selectedIndex != 0,
+            child: const Center(
+              child: Text("Home"),
             ),
-            label: "Home",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.search,
+          Offstage(
+            offstage: _selectedIndex != 1,
+            child: const Center(
+              child: Text("Discover"),
             ),
-            label: "Search",
+          ),
+          Offstage(
+            offstage: _selectedIndex != 2,
+            child: const Center(
+              child: Text("Settings"),
+            ),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 3,
+            child: const Center(
+              child: Text("Inbox"),
+            ),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 4,
+            child: const Center(
+              child: Text("Profile"),
+            ),
           ),
         ],
       ),
-      tabBuilder: (context, index) => screens[index],
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        height: 120,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            NavTap(
+              text: "Home",
+              icon: FontAwesomeIcons.house,
+              selectedIcon: FontAwesomeIcons.house,
+              isSelected: _selectedIndex == 0 ? true : false,
+              onTap: () => _onTap(0),
+            ),
+            NavTap(
+              text: "Discover",
+              icon: FontAwesomeIcons.compass,
+              selectedIcon: FontAwesomeIcons.solidCompass,
+              isSelected: _selectedIndex == 1 ? true : false,
+              onTap: () => _onTap(1),
+            ),
+            NavTap(
+              text: "Inbox",
+              icon: FontAwesomeIcons.message,
+              selectedIcon: FontAwesomeIcons.solidMessage,
+              isSelected: _selectedIndex == 3 ? true : false,
+              onTap: () => _onTap(3),
+            ),
+            NavTap(
+              text: "Profile",
+              icon: FontAwesomeIcons.user,
+              selectedIcon: FontAwesomeIcons.solidUser,
+              isSelected: _selectedIndex == 4 ? true : false,
+              onTap: () => _onTap(4),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
