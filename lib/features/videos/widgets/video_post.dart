@@ -6,6 +6,7 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../constants/sizes.dart';
+import 'video_button.dart';
 
 class VideoPost extends StatefulWidget {
   final VoidCallback onVideoFinished;
@@ -180,7 +181,40 @@ class _VideoPostState extends State<VideoPost>
                 ),
               ],
             ),
-          )
+          ),
+          Positioned(
+            bottom: Sizes.size12,
+            right: Sizes.size12,
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  foregroundImage: NetworkImage(
+                      "https://avatars.githubusercontent.com/u/639005?v=4"),
+                  child: Text(
+                    "니꼬",
+                  ),
+                ),
+                Gaps.v20,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  text: "2.9M",
+                ),
+                Gaps.v20,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidComment,
+                  text: "33K",
+                ),
+                Gaps.v20,
+                VideoButton(
+                  icon: FontAwesomeIcons.share,
+                  text: "Share",
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
