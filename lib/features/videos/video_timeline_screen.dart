@@ -28,6 +28,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
   }
 
   void _onVideoFinished() {
+    return;
     _pageController.nextPage(
       duration: _scrollDuration,
       curve: _scrollCurve,
@@ -51,6 +52,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
       itemBuilder: (context, index) => VideoPost(
         onVideoFinished: _onVideoFinished,
         index: index,
+        description: "This is my house in Thailand!!! wow wow wow wow wow wow",
       ),
     );
   }

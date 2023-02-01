@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -9,11 +10,15 @@ import '../../../constants/sizes.dart';
 class VideoPost extends StatefulWidget {
   final VoidCallback onVideoFinished;
   final int index;
+  final String description;
+  final bool _hasMore;
   const VideoPost({
     Key? key,
     required this.onVideoFinished,
     required this.index,
-  }) : super(key: key);
+    required this.description,
+  })  : _hasMore = description.length > 10,
+        super(key: key);
 
   @override
   State<VideoPost> createState() => _VideoPostState();
@@ -25,7 +30,9 @@ class _VideoPostState extends State<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/IMG_1050.MOV");
   bool _isPaused = false;
+  late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
+
   bool _isFinished() {
     return _videoPlayerController.value.isInitialized &&
         _videoPlayerController.value.duration ==
@@ -40,12 +47,14 @@ class _VideoPostState extends State<VideoPost>
     await _videoPlayerController.initialize();
     // _videoPlayerController.play();
     setState(() {});
+    await _videoPlayerController.setLooping(true);
     _videoPlayerController.addListener(_onVideoChange);
   }
 
   @override
   void initState() {
     super.initState();
+    _seeMore = !widget._hasMore;
     _initVideoPlayer();
     _animationController = AnimationController(
       vsync: this,
@@ -79,6 +88,12 @@ class _VideoPostState extends State<VideoPost>
     }
     setState(() {
       _isPaused = !_isPaused;
+    });
+  }
+
+  void _onTapSeeMore() {
+    setState(() {
+      _seeMore = !_seeMore;
     });
   }
 
@@ -123,6 +138,49 @@ class _VideoPostState extends State<VideoPost>
               ),
             ),
           ),
+          Positioned(
+            bottom: Sizes.size32,
+            left: Sizes.size32,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "@니꼬",
+                  style: TextStyle(
+                    fontSize: Sizes.size20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Gaps.v10,
+                Row(
+                  children: [
+                    Text(
+                      widget._hasMore && !_seeMore
+                          ? "${widget.description.substring(0, 15)}..."
+                          : widget.description,
+                      style: const TextStyle(
+                        fontSize: Sizes.size16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (widget._hasMore && !_seeMore) Gaps.h05,
+                    if (widget._hasMore && !_seeMore)
+                      GestureDetector(
+                        onTap: _onTapSeeMore,
+                        child: const Text(
+                          "See More",
+                          style: TextStyle(
+                            fontSize: Sizes.size16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                  ],
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
