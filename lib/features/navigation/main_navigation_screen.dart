@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/features/videos/post_video_screen.dart';
+import 'package:flutter_ticktoc/features/videos/video_timeline_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'widgets/nav_tap.dart';
@@ -34,9 +35,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const Center(
-              child: Text("Home"),
-            ),
+            child: const VideoTimelineScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
