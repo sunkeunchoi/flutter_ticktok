@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -45,10 +46,73 @@ class _VideoCommentsState extends State<VideoComments> {
             ),
           ],
         ),
-        body: ListView.builder(
+        bottomNavigationBar: BottomAppBar(
+            color: Colors.white,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: Sizes.size20,
+                  backgroundColor: Colors.grey.shade500,
+                  foregroundColor: Colors.white,
+                  child: const Text("니꼬"),
+                )
+              ],
+            )),
+        body: ListView.separated(
           itemCount: 10,
-          itemBuilder: (context, index) => Container(
-            child: Text("$index"),
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size10,
+            horizontal: Sizes.size16,
+          ),
+          separatorBuilder: (context, index) => Gaps.v20,
+          itemBuilder: (context, index) => Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CircleAvatar(
+                radius: Sizes.size20,
+                child: Text(
+                  "니꼬",
+                ),
+              ),
+              Gaps.h10,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "니꼬",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: Sizes.size14,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                    Gaps.v03,
+                    const Text(
+                      "That's not it l've seen the same thing but also in a cave",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Gaps.h10,
+              Column(
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.heart,
+                    size: Sizes.size20,
+                    color: Colors.grey.shade500,
+                  ),
+                  Gaps.v02,
+                  Text("52.2K",
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                      ))
+                ],
+              )
+            ],
           ),
         ),
       ),
