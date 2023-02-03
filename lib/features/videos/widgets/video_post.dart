@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/assets/video.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/widgets/video_comments.dart';
@@ -30,7 +31,7 @@ class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/IMG_1050.MOV");
+      VideoPlayerController.asset(Video.example1);
   bool _isPaused = false;
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
