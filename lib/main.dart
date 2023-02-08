@@ -14,25 +14,28 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(
-            foregroundColor: Colors.black,
-            elevation: 0,
-            backgroundColor: Colors.white,
-            titleTextStyle: TextStyle(
-              color: Colors.black,
-              fontSize: Sizes.size16 + Sizes.size02,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          bottomAppBarTheme: const BottomAppBarTheme(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.black,
+          elevation: 0,
+          backgroundColor: Colors.white,
+          titleTextStyle: TextStyle(
             color: Colors.black,
+            fontSize: Sizes.size16 + Sizes.size02,
+            fontWeight: FontWeight.w600,
           ),
-          primaryColor: const Color(0xFFE9435A),
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: Color(0xFFE9435A),
-            selectionColor: Color(0xFFE9435A),
-          )),
+        ),
+        bottomAppBarTheme: const BottomAppBarTheme(
+          color: Colors.black,
+        ),
+        primaryColor: const Color(0xFFE9435A),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFFE9435A),
+          selectionColor: Color(0xFFE9435A),
+        ),
+        splashColor: Colors.transparent,
+        // highlightColor: Colors.transparent
+      ),
       // home: const SignUpScreen(),
       home: const MainNavigationScreen(),
     );
