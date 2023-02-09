@@ -45,12 +45,35 @@ class ActivityScreen extends StatelessWidget {
               ),
             ),
             title: RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 text: "Account updates:",
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  fontSize: Sizes.size16,
                 ),
+                children: [
+                  TextSpan(
+                    text: " Upload longer videos",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: " 1h",
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
+            ),
+            trailing: const FaIcon(
+              FontAwesomeIcons.chevronRight,
+              size: Sizes.size16,
             ),
           ),
         ],
