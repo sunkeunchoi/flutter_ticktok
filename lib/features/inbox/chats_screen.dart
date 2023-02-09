@@ -11,6 +11,21 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
+  final GlobalKey<AnimatedListState> _key = GlobalKey<AnimatedListState>();
+  void _addItem() {
+    if (_key.currentState == null) return;
+    // _key.currentState?.insertItem(0);
+    _key.currentState?.insertItem(
+      _items.length,
+      duration: const Duration(
+        milliseconds: 500,
+      ),
+    );
+    _items.add(_items.length);
+  }
+
+  final List<int> _items = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +36,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _addItem,
             icon: const FaIcon(
               FontAwesomeIcons.plus,
               size: Sizes.size20,
@@ -29,37 +44,48 @@ class _ChatsScreenState extends State<ChatsScreen> {
           ),
         ],
       ),
-      body: ListView(
+      body: AnimatedList(
+        key: _key,
         padding: const EdgeInsets.symmetric(
           vertical: Sizes.size10,
         ),
-        children: [
-          ListTile(
-            leading: const CircleAvatar(
-              radius: Sizes.size28,
-              foregroundImage: NetworkImage(
-                ExampleImage.profile1,
+        itemBuilder: (context, index, animation) {
+          return ScaleTransition(
+            key: UniqueKey(),
+            scale: animation,
+            child: FadeTransition(
+              opacity: animation,
+              child: SizeTransition(
+                sizeFactor: animation,
+                child: ListTile(
+                  leading: const CircleAvatar(
+                    radius: Sizes.size28,
+                    foregroundImage: NetworkImage(
+                      ExampleImage.profile1,
+                    ),
+                    child: Text("니꼬"),
+                  ),
+                  title: Text(
+                    "Lynn $index",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: const Text(
+                    "Don't forget to make video",
+                  ),
+                  trailing: Text(
+                    "2:16 PM",
+                    style: TextStyle(
+                      color: Colors.grey.shade500,
+                      fontSize: Sizes.size12,
+                    ),
+                  ),
+                ),
               ),
-              child: Text("니꼬"),
             ),
-            title: const Text(
-              "Lynn",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            subtitle: const Text(
-              "Don't forget to make video",
-            ),
-            trailing: Text(
-              "2:16 PM",
-              style: TextStyle(
-                color: Colors.grey.shade500,
-                fontSize: Sizes.size12,
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
