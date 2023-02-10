@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -27,39 +28,65 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
+          ListTile(
+            title: const Text("Log out (iOS)"),
+            textColor: Colors.red,
+            onTap: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: const Text("Are you sure?"),
+                  content: const Text("Please dont't go"),
+                  actions: [
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(
+                        "No",
+                      ),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.of(context).pop(),
+                      isDestructiveAction: true,
+                      child: const Text(
+                        "Yes",
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("Log out (android)"),
+            textColor: Colors.red,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  icon: const FaIcon(
+                    FontAwesomeIcons.skull,
+                  ),
+                  title: const Text("Are you sure?"),
+                  content: const Text("Please dont't go"),
+                  actions: [
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.car,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.a,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           const AboutListTile(),
-          SwitchListTile.adaptive(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-          ),
-          SwitchListTile(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-          ),
-          Switch.adaptive(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-          ),
-          CupertinoSwitch(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-          ),
-          Switch(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-          ),
-          Checkbox(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-          ),
-          CheckboxListTile(
-            value: _notifiactions,
-            onChanged: _onNotificationsChanged,
-            activeColor: Colors.black,
-            title: const Text(
-              "Enable notifications",
-            ),
-          ),
         ],
       ),
     );
