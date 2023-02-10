@@ -29,6 +29,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         children: [
           ListTile(
+            title: const Text("iOS bottom sheet"),
+            textColor: Colors.red,
+            onTap: () {
+              showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoActionSheet(
+                  title: const Text("Are you sure?"),
+                  message: const Text("Please dont't go"),
+                  actions: [
+                    CupertinoActionSheetAction(
+                      isDefaultAction: true,
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(
+                        "No",
+                      ),
+                    ),
+                    CupertinoActionSheetAction(
+                      onPressed: () => Navigator.of(context).pop(),
+                      isDestructiveAction: true,
+                      child: const Text(
+                        "Yes",
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          ListTile(
             title: const Text("Log out (iOS)"),
             textColor: Colors.red,
             onTap: () {
