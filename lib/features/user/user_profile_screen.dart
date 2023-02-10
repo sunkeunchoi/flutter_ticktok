@@ -11,61 +11,99 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          snap: true,
-          floating: true,
-          // stretch: true,
-          // pinned: true,
-          backgroundColor: Colors.teal,
-          collapsedHeight: 100,
-          expandedHeight: 200,
-          flexibleSpace: FlexibleSpaceBar(
-            // stretchModes: const [
-            //   StretchMode.blurBackground,
-            //   StretchMode.fadeTitle,
-            //   StretchMode.zoomBackground,
-            // ],
-            background: Image.asset(
-              ExampleImage.example1,
-              fit: BoxFit.cover,
+    return SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            snap: true,
+            floating: true,
+            // stretch: true,
+            // pinned: true,
+            backgroundColor: Colors.teal,
+            collapsedHeight: 100,
+            expandedHeight: 200,
+            flexibleSpace: FlexibleSpaceBar(
+              // stretchModes: const [
+              //   StretchMode.blurBackground,
+              //   StretchMode.fadeTitle,
+              //   StretchMode.zoomBackground,
+              // ],
+              background: Image.asset(
+                ExampleImage.example1,
+                fit: BoxFit.cover,
+              ),
+              title: const Text("Hello"),
             ),
-            title: const Text("Hello"),
           ),
-        ),
-        SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate(
-            childCount: 21,
-            (context, index) => Container(
-              alignment: Alignment.center,
-              color: Colors.red[100 * (index % 7)],
-              child: Text(
-                "Item $index",
+          SliverFixedExtentList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: 21,
+              (context, index) => Container(
+                alignment: Alignment.center,
+                color: Colors.red[100 * (index % 7)],
+                child: Text(
+                  "Item $index",
+                ),
               ),
             ),
+            itemExtent: 100,
           ),
-          itemExtent: 100,
-        ),
-        SliverGrid(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 1,
+          SliverPersistentHeader(
+            delegate: CustomDelegate(),
+            pinned: true,
           ),
-          delegate: SliverChildBuilderDelegate(
-            childCount: 60,
-            (context, index) => Container(
-              alignment: Alignment.center,
-              color: Colors.deepPurple[100 * (index % 7)],
-              child: Text(
-                "Item $index",
+          SliverGrid(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              childCount: 60,
+              (context, index) => Container(
+                alignment: Alignment.center,
+                color: Colors.deepPurple[100 * (index % 7)],
+                child: Text(
+                  "Item $index",
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
+  }
+}
+
+class CustomDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.indigo,
+      child: const FractionallySizedBox(
+        heightFactor: 1,
+        child: Center(
+          child: Text(
+            "Title!!!",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 100.0;
+
+  @override
+  double get minExtent => 50.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }
