@@ -36,6 +36,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
         SliverFixedExtentList(
           delegate: SliverChildBuilderDelegate(
+            childCount: 21,
             (context, index) => Container(
               alignment: Alignment.center,
               color: Colors.red[100 * (index % 7)],
@@ -46,6 +47,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           itemExtent: 100,
         ),
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 1,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            childCount: 60,
+            (context, index) => Container(
+              alignment: Alignment.center,
+              color: Colors.deepPurple[100 * (index % 7)],
+              child: Text(
+                "Item $index",
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
