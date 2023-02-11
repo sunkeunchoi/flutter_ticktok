@@ -79,70 +79,74 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 mainAxisSpacing: Sizes.size10,
                 childAspectRatio: 9 / 20,
               ),
-              itemBuilder: (context, index) => Column(
-                children: [
-                  Container(
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        Sizes.size04,
+              itemBuilder: (context, index) => LayoutBuilder(
+                builder: (context, constraints) => Column(
+                  children: [
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          Sizes.size04,
+                        ),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 9 / 16,
+                        child: FadeInImage.assetNetwork(
+                          fit: BoxFit.cover,
+                          placeholder: ExampleImage.example1,
+                          image: ExampleImage.network1,
+                        ),
                       ),
                     ),
-                    child: AspectRatio(
-                      aspectRatio: 9 / 16,
-                      child: FadeInImage.assetNetwork(
-                        fit: BoxFit.cover,
-                        placeholder: ExampleImage.example1,
-                        image: ExampleImage.network1,
+                    if (constraints.maxWidth > 350) ...[
+                      Gaps.v10,
+                      const Text(
+                        "This is a very log caption for my tiktok that i am upload just wul jot sjot are kdite",
+                        style: TextStyle(
+                          fontSize: Sizes.size18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ),
-                  Gaps.v10,
-                  const Text(
-                    "This is a very log caption for my tiktok that i am upload just wul jot sjot are kdite",
-                    style: TextStyle(
-                      fontSize: Sizes.size18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Gaps.v05,
-                  DefaultTextStyle(
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: Sizes.size12,
-                          backgroundImage: NetworkImage(
-                            ExampleImage.profile1,
-                          ),
-                        ),
-                        Gaps.h04,
-                        const Expanded(
-                          child: Text(
-                            "My avatar is very very long words names",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Gaps.h04,
-                        FaIcon(
-                          FontAwesomeIcons.heart,
-                          size: Sizes.size16,
+                      Gaps.v05,
+                      DefaultTextStyle(
+                        style: TextStyle(
                           color: Colors.grey.shade600,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Gaps.h02,
-                        const Text(
-                          "2.5M",
+                        child: Row(
+                          children: [
+                            const CircleAvatar(
+                              radius: Sizes.size12,
+                              backgroundImage: NetworkImage(
+                                ExampleImage.profile1,
+                              ),
+                            ),
+                            Gaps.h04,
+                            const Expanded(
+                              child: Text(
+                                "My avatar is very very long words names",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Gaps.h04,
+                            FaIcon(
+                              FontAwesomeIcons.heart,
+                              size: Sizes.size16,
+                              color: Colors.grey.shade600,
+                            ),
+                            Gaps.h02,
+                            const Text(
+                              "2.5M",
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                    ]
+                  ],
+                ),
               ),
             ),
             for (var tab in tabs.skip(1))
