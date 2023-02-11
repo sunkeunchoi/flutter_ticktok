@@ -26,7 +26,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: FlexThemeData.light(
-        scheme: FlexScheme.materialBaseline,
+        scheme: FlexScheme.flutterDash,
         surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
         blendLevel: 9,
         subThemesData: const FlexSubThemesData(
@@ -40,7 +40,7 @@ class App extends StatelessWidget {
         // fontFamily: "GmarketSans",
       ),
       darkTheme: FlexThemeData.dark(
-        scheme: FlexScheme.materialBaseline,
+        scheme: FlexScheme.flutterDash,
         surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
         blendLevel: 15,
         subThemesData: const FlexSubThemesData(

@@ -8,12 +8,17 @@ class FormButton extends StatelessWidget {
     required this.text,
     required this.onTap,
   });
+
   final bool disabled;
-  final String text;
   final VoidCallback onTap;
+  final String text;
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textStyle = Theme.of(context).textTheme;
+    final textColor = isDark ? Colors.black : Colors.white;
+    final disabledColor = isDark ? Colors.grey.shade700 : Colors.grey.shade500;
     return GestureDetector(
       onTap: disabled ? () {} : onTap,
       child: FractionallySizedBox(
@@ -25,27 +30,20 @@ class FormButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               Sizes.size05,
             ),
-            color: !disabled
-                ? Theme.of(context).primaryColor
-                : isDark
-                    ? Colors.grey.shade800
-                    : Colors.grey.shade400,
+            color: !disabled ? Theme.of(context).primaryColor : disabledColor,
           ),
           child: AnimatedDefaultTextStyle(
-            style: TextStyle(
-              color: !disabled
-                  ? isDark
-                      ? Colors.black
-                      : Colors.white
-                  : isDark
-                      ? Colors.grey.shade700
-                      : Colors.grey.shade500,
+            style: textStyle.titleLarge!.copyWith(
+              color: !disabled ? textColor : disabledColor,
               fontWeight: FontWeight.w600,
             ),
             duration: const Duration(microseconds: 300),
             child: Text(
               text,
               textAlign: TextAlign.center,
+              style: textStyle.titleLarge!.copyWith(
+                color: textColor,
+              ),
             ),
           ),
         ),

@@ -61,15 +61,16 @@ class LoginScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "Dont' have an account?",
+              style: textStyle.bodyLarge,
             ),
             Gaps.h05,
             GestureDetector(
               onTap: () => onSinupTap(context),
               child: Text(
                 "Sign up",
-                style: TextStyle(
+                style: textStyle.bodyLarge!.copyWith(
                   color: Theme.of(context).primaryColor,
                 ),
               ),
