@@ -145,7 +145,10 @@ class _VideoPostState extends State<VideoPost>
           children: [
             Positioned.fill(
               child: _videoPlayerController.value.isInitialized
-                  ? VideoPlayer(_videoPlayerController)
+                  ? AspectRatio(
+                      aspectRatio: _videoPlayerController.value.aspectRatio,
+                      child: VideoPlayer(_videoPlayerController),
+                    )
                   : Container(color: Colors.black),
             ),
             Positioned.fill(
