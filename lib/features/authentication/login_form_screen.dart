@@ -50,44 +50,45 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Login"),
-        ),
-        body: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.size36,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Gaps.v28,
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Email",
-                    ),
-                    validator: _emailValidator,
-                    onSaved: _sumbitEmail,
+      appBar: AppBar(
+        title: const Text("Login"),
+      ),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size36,
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Gaps.v28,
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Email",
                   ),
-                  Gaps.v16,
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Password",
-                    ),
-                    validator: _passwordValidator,
-                    onSaved: _submitPassword,
+                  validator: _emailValidator,
+                  onSaved: _sumbitEmail,
+                ),
+                Gaps.v16,
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Password",
                   ),
-                  Gaps.v28,
-                  FormButton(
-                    disabled: false,
-                    text: "Login",
-                    onTap: _onSubmitTap,
-                  ),
-                ],
-              ),
+                  validator: _passwordValidator,
+                  onSaved: _submitPassword,
+                ),
+                Gaps.v28,
+                FormButton(
+                  disabled: false,
+                  text: "Login",
+                  onTap: _onSubmitTap,
+                ),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

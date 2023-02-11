@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/assets/video.dart';
@@ -52,6 +53,7 @@ class _VideoPostState extends State<VideoPost>
     // _videoPlayerController.play();
     setState(() {});
     await _videoPlayerController.setLooping(true);
+    if (kIsWeb) await _videoPlayerController.setVolume(0);
     _videoPlayerController.addListener(_onVideoChange);
   }
 
