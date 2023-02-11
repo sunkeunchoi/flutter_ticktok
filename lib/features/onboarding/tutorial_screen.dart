@@ -35,7 +35,9 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   void _onEnterAppTap() {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+      MaterialPageRoute(
+        builder: (context) => const MainNavigationScreen(),
+      ),
       (route) => false,
     );
   }
@@ -102,12 +104,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
               duration: _duration,
               opacity: _showingPage == Pages.first ? 0 : 1,
               child: CupertinoButton(
-                onPressed: () {},
+                onPressed: _onEnterAppTap,
                 color: Theme.of(context).primaryColor,
                 child: Text(
                   "Enter the app!",
-                  style: textStyle.titleLarge!
-                      .copyWith(color: isDark ? Colors.black : Colors.white),
+                  style: textStyle.titleLarge!.copyWith(
+                    color: isDark ? Colors.black : Colors.white,
+                  ),
                 ),
               ),
             ),

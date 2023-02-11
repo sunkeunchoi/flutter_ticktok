@@ -23,6 +23,9 @@ class _InterestButtonState extends State<InterestButton> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textTheme = Theme.of(context).textTheme;
+    final textColor = isDark ? Colors.black : Colors.white;
     return GestureDetector(
       onTap: _onTap,
       child: AnimatedContainer(
@@ -34,7 +37,13 @@ class _InterestButtonState extends State<InterestButton> {
           vertical: Sizes.size12,
         ),
         decoration: BoxDecoration(
-          color: _isSelected ? Theme.of(context).primaryColor : Colors.white,
+          color: _isSelected
+              ? Theme.of(context).primaryColor
+              : Theme.of(context)
+                  .buttonTheme
+                  .colorScheme!
+                  .outline
+                  .withOpacity(0.5),
           border: Border.all(
             color: Colors.black.withOpacity(
               0.1,
@@ -54,10 +63,12 @@ class _InterestButtonState extends State<InterestButton> {
         ),
         child: Text(
           widget.interest,
-          style: TextStyle(
-            fontSize: Sizes.size16,
-            fontWeight: FontWeight.w600,
-            color: _isSelected ? Colors.white : Colors.black87,
+          style: textTheme.bodyLarge!.copyWith(
+            color: _isSelected
+                ? textColor
+                : textColor.withOpacity(
+                    0.5,
+                  ),
           ),
         ),
       ),

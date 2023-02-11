@@ -68,6 +68,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: AnimatedOpacity(
@@ -95,7 +96,9 @@ class _InterestsScreenState extends State<InterestsScreen> {
             ),
             child: Text(
               "Next",
-              style: textStyle.bodyLarge,
+              style: textStyle.bodyLarge!.copyWith(
+                color: isDark ? Colors.black : Colors.white,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
