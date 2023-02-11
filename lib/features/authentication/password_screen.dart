@@ -62,6 +62,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
@@ -76,12 +77,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v40,
-              const Text(
+              Text(
                 "Password",
-                style: TextStyle(
-                  fontSize: Sizes.size20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: textStyle.titleLarge,
               ),
               Gaps.v16,
               TextField(
@@ -95,21 +93,25 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       children: [
                         GestureDetector(
                           onTap: _onClearTap,
-                          child: FaIcon(
+                          child: Icon(
                             FontAwesomeIcons.solidCircleXmark,
-                            color: Colors.grey.shade500,
-                            size: Sizes.size20,
+                            color: Theme.of(context)
+                                .iconTheme
+                                .color!
+                                .withOpacity(0.5),
                           ),
                         ),
                         Gaps.h16,
                         GestureDetector(
                           onTap: _toogleObscureText,
-                          child: FaIcon(
+                          child: Icon(
                             _obscureText
                                 ? FontAwesomeIcons.eye
                                 : FontAwesomeIcons.eyeSlash,
-                            color: Colors.grey.shade500,
-                            size: Sizes.size20,
+                            color: Theme.of(context)
+                                .iconTheme
+                                .color!
+                                .withOpacity(0.5),
                           ),
                         ),
                       ],
@@ -127,23 +129,20 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     )),
               ),
               Gaps.v16,
-              const Text(
+              Text(
                 "Your password must have:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: textStyle.labelLarge,
               ),
               Gaps.v10,
               Row(
                 children: [
-                  FaIcon(
+                  Icon(
                     FontAwesomeIcons.circleCheck,
-                    size: Sizes.size20,
                     color: _isPasswordValid()
                         ? Colors.green
                         : Colors.grey.shade500,
                   ),
-                  Gaps.h05,
+                  Gaps.h10,
                   const Text(
                     "8 to 20 characters",
                   ),
@@ -154,12 +153,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 children: [
                   FaIcon(
                     FontAwesomeIcons.circleCheck,
-                    size: Sizes.size20,
                     color: _isPasswordValid()
                         ? Colors.green
                         : Colors.grey.shade500,
                   ),
-                  Gaps.h05,
+                  Gaps.h10,
                   const Text("Letters, numbers, and special characters"),
                 ],
               ),

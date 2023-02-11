@@ -57,6 +57,7 @@ class _EmailScreenState extends State<EmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
@@ -71,12 +72,9 @@ class _EmailScreenState extends State<EmailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v40,
-              const Text(
+              Text(
                 "What is your email",
-                style: TextStyle(
-                  fontSize: Sizes.size20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: textStyle.titleLarge,
               ),
               Gaps.v16,
               TextField(

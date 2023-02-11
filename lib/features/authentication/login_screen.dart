@@ -19,6 +19,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,20 +27,14 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               Gaps.v80,
-              const Text(
+              Text(
                 "Login to TikTok",
-                style: TextStyle(
-                  fontSize: Sizes.size28,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: textStyle.headlineLarge,
               ),
               Gaps.v20,
-              const Text(
+              Text(
                 "Manage your account, check notifications, comment on videos, and more.",
-                style: TextStyle(
-                  fontSize: Sizes.size16,
-                  color: Colors.black54,
-                ),
+                style: textStyle.titleMedium,
                 textAlign: TextAlign.center,
               ),
               Gaps.v40,
@@ -63,7 +58,6 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

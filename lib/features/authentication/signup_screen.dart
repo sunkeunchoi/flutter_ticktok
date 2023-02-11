@@ -26,6 +26,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return OrientationBuilder(
       builder: (context, orientation) => Scaffold(
         body: SafeArea(
@@ -34,20 +35,14 @@ class SignUpScreen extends StatelessWidget {
             child: Column(
               children: [
                 Gaps.v80,
-                const Text(
+                Text(
                   "Sign up for TikTok",
-                  style: TextStyle(
-                    fontSize: Sizes.size28,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textStyle.headlineLarge,
                 ),
                 Gaps.v20,
-                const Text(
+                Text(
                   "Create a profile, follow other other accounts, make your own videos, and more.",
-                  style: TextStyle(
-                    fontSize: Sizes.size16,
-                    color: Colors.black54,
-                  ),
+                  style: textStyle.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
                 Gaps.v40,
@@ -97,7 +92,6 @@ class SignUpScreen extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

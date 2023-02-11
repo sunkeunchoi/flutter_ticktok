@@ -51,6 +51,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sign up"),
@@ -72,20 +73,14 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gaps.v40,
-            const Text(
+            Text(
               "When is your birthday?",
-              style: TextStyle(
-                fontSize: Sizes.size20,
-                fontWeight: FontWeight.w600,
-              ),
+              style: textStyle.titleLarge,
             ),
             Gaps.v08,
-            const Text(
+            Text(
               "Your birthday won't be shown publicly.",
-              style: TextStyle(
-                fontSize: Sizes.size16,
-                color: Colors.black54,
-              ),
+              style: textStyle.bodyLarge,
             ),
             Gaps.v16,
             TextField(
@@ -93,16 +88,17 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               enabled: false,
               cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor,
-                    ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor,
                   ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade400,
-                    ),
-                  )),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
             ),
             Gaps.v16,
             FormButton(

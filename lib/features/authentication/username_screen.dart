@@ -44,6 +44,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sign up"),
@@ -56,20 +57,14 @@ class _UsernameScreenState extends State<UsernameScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gaps.v40,
-            const Text(
+            Text(
               "Create username",
-              style: TextStyle(
-                fontSize: Sizes.size20,
-                fontWeight: FontWeight.w600,
-              ),
+              style: textStyle.titleLarge,
             ),
             Gaps.v08,
-            const Text(
+            Text(
               "You can always change this later.",
-              style: TextStyle(
-                fontSize: Sizes.size16,
-                color: Colors.black54,
-              ),
+              style: textStyle.bodyMedium,
             ),
             Gaps.v16,
             TextField(

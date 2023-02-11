@@ -13,6 +13,7 @@ class FormButton extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: disabled ? () {} : onTap,
       child: FractionallySizedBox(
@@ -24,13 +25,21 @@ class FormButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               Sizes.size05,
             ),
-            color: disabled
-                ? Colors.grey.shade400
-                : Theme.of(context).primaryColor,
+            color: !disabled
+                ? Theme.of(context).primaryColor
+                : isDark
+                    ? Colors.grey.shade800
+                    : Colors.grey.shade400,
           ),
           child: AnimatedDefaultTextStyle(
             style: TextStyle(
-              color: disabled ? Colors.grey.shade500 : Colors.white,
+              color: !disabled
+                  ? isDark
+                      ? Colors.black
+                      : Colors.white
+                  : isDark
+                      ? Colors.grey.shade700
+                      : Colors.grey.shade500,
               fontWeight: FontWeight.w600,
             ),
             duration: const Duration(microseconds: 300),

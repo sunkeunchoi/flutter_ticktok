@@ -1,8 +1,8 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ticktoc/features/user/user_profile_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'features/authentication/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,9 +11,9 @@ void main() async {
       DeviceOrientation.portraitUp,
     ],
   );
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle.light,
-  );
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   SystemUiOverlayStyle.light,
+  // );
   runApp(const App());
 }
 
@@ -36,7 +36,8 @@ class App extends StatelessWidget {
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
         swapLegacyOnMaterial3: true,
-        fontFamily: GoogleFonts.jua().fontFamily,
+        // fontFamily: GoogleFonts.jua().fontFamily,
+        // fontFamily: "GmarketSans",
       ),
       darkTheme: FlexThemeData.dark(
         scheme: FlexScheme.materialBaseline,
@@ -48,10 +49,11 @@ class App extends StatelessWidget {
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
         swapLegacyOnMaterial3: true,
-        fontFamily: GoogleFonts.jua().fontFamily,
+        // fontFamily: GoogleFonts.jua().fontFamily,
+        // fontFamily: "GmarketSans",
       ),
       // home: const SignUpScreen(),
-      home: const UserProfileScreen(),
+      home: const SignUpScreen(),
     );
   }
 }
