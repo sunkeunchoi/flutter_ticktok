@@ -67,9 +67,9 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Colors.white,
         title: AnimatedOpacity(
           opacity: _showTitle ? 1 : 0,
           duration: const Duration(
@@ -81,32 +81,22 @@ class _InterestsScreenState extends State<InterestsScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        surfaceTintColor: Colors.white,
         height: 120,
         elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size02,
-            vertical: Sizes.size02,
-          ),
-          child: GestureDetector(
-            onTap: _onNextTap,
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(
-                  Sizes.size05,
-                ),
+        child: GestureDetector(
+          onTap: _onNextTap,
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(
+                Sizes.size05,
               ),
-              child: const Text(
-                "Next",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Sizes.size16,
-                ),
-                textAlign: TextAlign.center,
-              ),
+            ),
+            child: Text(
+              "Next",
+              style: textStyle.bodyLarge,
+              textAlign: TextAlign.center,
             ),
           ),
         ),
@@ -125,20 +115,14 @@ class _InterestsScreenState extends State<InterestsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Choose your interests",
-                    style: TextStyle(
-                      fontSize: Sizes.size40,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: textStyle.headlineLarge,
                   ),
                   Gaps.v20,
                   Text(
                     "Get better video recommendations",
-                    style: TextStyle(
-                      fontSize: Sizes.size20,
-                      color: Colors.grey.shade500,
-                    ),
+                    style: textStyle.titleLarge,
                   ),
                   Gaps.v64,
                   Wrap(

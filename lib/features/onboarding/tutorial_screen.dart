@@ -42,6 +42,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onPanUpdate: _onPanUpdate,
       onPanEnd: _onPanEnd,
@@ -58,41 +60,31 @@ class _TutorialScreenState extends State<TutorialScreen> {
               duration: _duration,
               firstChild: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Gaps.v52,
                   Text(
                     "Watch cool videos!",
-                    style: TextStyle(
-                      fontSize: Sizes.size40,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: textStyle.displayMedium,
                   ),
                   Gaps.v16,
                   Text(
                     "Videos are personalized for you based on what you watch, like and share.",
-                    style: TextStyle(
-                      fontSize: Sizes.size20,
-                    ),
+                    style: textStyle.titleLarge,
                   ),
                 ],
               ),
               secondChild: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Gaps.v52,
                   Text(
                     "Follow the rules!",
-                    style: TextStyle(
-                      fontSize: Sizes.size40,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: textStyle.displayMedium,
                   ),
                   Gaps.v16,
                   Text(
                     "Take care plis!",
-                    style: TextStyle(
-                      fontSize: Sizes.size20,
-                    ),
+                    style: textStyle.titleLarge,
                   ),
                 ],
               ),
@@ -101,7 +93,6 @@ class _TutorialScreenState extends State<TutorialScreen> {
         ),
         bottomNavigationBar: BottomAppBar(
           height: 140,
-          surfaceTintColor: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: Sizes.size10,
@@ -113,11 +104,10 @@ class _TutorialScreenState extends State<TutorialScreen> {
               child: CupertinoButton(
                 onPressed: () {},
                 color: Theme.of(context).primaryColor,
-                child: const Text(
+                child: Text(
                   "Enter the app!",
-                  style: TextStyle(
-                    fontSize: Sizes.size20,
-                  ),
+                  style: textStyle.titleLarge!
+                      .copyWith(color: isDark ? Colors.black : Colors.white),
                 ),
               ),
             ),
