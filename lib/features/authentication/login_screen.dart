@@ -40,7 +40,7 @@ class LoginScreen extends StatelessWidget {
               Gaps.v40,
               AuthButton(
                 text: "Use email & password",
-                icon: const FaIcon(
+                icon: const Icon(
                   FontAwesomeIcons.user,
                 ),
                 onTapCallback: () => onEmailTap(context),
@@ -48,7 +48,7 @@ class LoginScreen extends StatelessWidget {
               Gaps.v16,
               AuthButton(
                 text: "Continue with Apple",
-                icon: const FaIcon(
+                icon: const Icon(
                   FontAwesomeIcons.apple,
                 ),
                 onTapCallback: () {},

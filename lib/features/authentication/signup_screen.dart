@@ -49,7 +49,7 @@ class SignUpScreen extends StatelessWidget {
                 if (orientation == Orientation.portrait) ...[
                   AuthButton(
                     text: "Use email & password",
-                    icon: const FaIcon(
+                    icon: const Icon(
                       FontAwesomeIcons.user,
                     ),
                     onTapCallback: () => onEmailTap(context),
@@ -57,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                   Gaps.v16,
                   AuthButton(
                     text: "Continue with Apple",
-                    icon: const FaIcon(
+                    icon: const Icon(
                       FontAwesomeIcons.apple,
                     ),
                     onTapCallback: () {},
@@ -69,7 +69,7 @@ class SignUpScreen extends StatelessWidget {
                       Expanded(
                         child: AuthButton(
                           text: "Use email & password",
-                          icon: const FaIcon(
+                          icon: const Icon(
                             FontAwesomeIcons.user,
                           ),
                           onTapCallback: () => onEmailTap(context),
@@ -79,7 +79,7 @@ class SignUpScreen extends StatelessWidget {
                       Expanded(
                         child: AuthButton(
                           text: "Continue with Apple",
-                          icon: const FaIcon(
+                          icon: const Icon(
                             FontAwesomeIcons.apple,
                           ),
                           onTapCallback: () {},
