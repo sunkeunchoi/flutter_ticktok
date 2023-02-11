@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/discover/discover_screen.dart';
+import 'package:flutter_ticktoc/features/user/user_profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +47,7 @@ class App extends StatelessWidget {
         // highlightColor: Colors.transparent
       ),
       // home: const SignUpScreen(),
-      home: const DiscoverScreen(),
+      home: const UserProfileScreen(),
     );
   }
 }
