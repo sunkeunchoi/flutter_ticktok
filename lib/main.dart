@@ -13,6 +13,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.light,
   );
+
   runApp(const App());
 }
 
