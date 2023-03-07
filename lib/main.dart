@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/navigation/main_navigation_screen.dart';
+import 'package:flutter_ticktoc/features/user/user_profile_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+    ],
+  );
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.light,
+  );
   runApp(const App());
 }
 
@@ -37,7 +47,7 @@ class App extends StatelessWidget {
         // highlightColor: Colors.transparent
       ),
       // home: const SignUpScreen(),
-      home: const MainNavigationScreen(),
+      home: const UserProfileScreen(),
     );
   }
 }
