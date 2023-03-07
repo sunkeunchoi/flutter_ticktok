@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/constants/gaps.dart';
+import 'package:flutter_ticktoc/features/videos/post_video_screen.dart';
+import 'package:flutter_ticktoc/features/videos/video_timeline_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'widgets/nav_tap.dart';
+import 'widgets/post_video_button.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -19,16 +23,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     });
   }
 
+  void _onPostVideoButtonTap() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const PostVideoScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
       body: Stack(
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const Center(
-              child: Text("Home"),
-            ),
+            child: const VideoTimelineScreen(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
@@ -76,6 +84,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               isSelected: _selectedIndex == 1 ? true : false,
               onTap: () => _onTap(1),
             ),
+            Gaps.h24,
+            GestureDetector(
+              onTap: _onPostVideoButtonTap,
+              child: const PostVideoButton(),
+            ),
+            Gaps.h24,
             NavTap(
               text: "Inbox",
               icon: FontAwesomeIcons.message,
