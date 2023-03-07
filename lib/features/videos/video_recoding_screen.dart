@@ -18,6 +18,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
   late CameraController _cameraController;
   bool _hasPermission = false;
   bool _isSelfieMode = true;
+  late FlashMode _flashMode;
   Future<void> initCamera() async {
     final cameras = await availableCameras();
     print(cameras);
@@ -27,6 +28,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
       ResolutionPreset.max,
     );
     await _cameraController.initialize();
+    _flashMode = _cameraController.value.flashMode;
   }
 
   Future<void> initPermissions() async {
@@ -41,6 +43,13 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
         _hasPermission = true;
       });
     } else {}
+  }
+
+  Future<void> _setFlashMode(FlashMode newFlashMode) async {
+    await _cameraController.setFlashMode(newFlashMode);
+    setState(() {
+      _flashMode = newFlashMode;
+    });
   }
 
   Future<void> _toggleSelfieMode() async {
@@ -68,13 +77,62 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
                   Positioned(
                     top: 24,
                     right: 24,
-                    child: GestureDetector(
-                      onTap: _toggleSelfieMode,
-                      child: const Icon(
-                        Icons.cameraswitch_rounded,
-                        size: 36,
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      children: [
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: _toggleSelfieMode,
+                          child: const Icon(
+                            Icons.cameraswitch_rounded,
+                            size: 36,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.off),
+                          child: Icon(
+                            Icons.flash_off_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.off
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
+                        ),
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.always),
+                          child: Icon(
+                            Icons.flash_on_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.always
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
+                        ),
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.auto),
+                          child: Icon(
+                            Icons.flash_auto_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.auto
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
+                        ),
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.torch),
+                          child: Icon(
+                            Icons.flashlight_on_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.torch
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],
