@@ -15,18 +15,18 @@ class VideoRecodingScreen extends StatefulWidget {
 }
 
 class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
-  late final CameraController _cameraController;
+  late CameraController _cameraController;
   bool _hasPermission = false;
-  bool _isReady = false;
+  bool _isSelfieMode = true;
   Future<void> initCamera() async {
     final cameras = await availableCameras();
-    if (cameras.isEmpty) return;
-    _cameraController =
-        CameraController(cameras.first, ResolutionPreset.ultraHigh);
+    print(cameras);
+    if (cameras.isEmpty || cameras.length < 2) return;
+    _cameraController = CameraController(
+      _isSelfieMode ? cameras[1] : cameras[0],
+      ResolutionPreset.max,
+    );
     await _cameraController.initialize();
-    setState(() {
-      _isReady = _hasPermission && _cameraController.value.isInitialized;
-    });
   }
 
   Future<void> initPermissions() async {
@@ -43,6 +43,12 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
     } else {}
   }
 
+  Future<void> _toggleSelfieMode() async {
+    _isSelfieMode = !_isSelfieMode;
+    await initCamera();
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,18 +59,26 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'VideoRecodingScreen',
-        ),
-      ),
-      body: _isReady
+      body: !_hasPermission || !_cameraController.value.isInitialized
           ? const DefaultLoading(message: "Requesting permissions")
-          : Stack(
-              alignment: Alignment.center,
-              children: [
-                CameraPreview(_cameraController),
-              ],
+          : Center(
+              child: Stack(
+                children: [
+                  CameraPreview(_cameraController),
+                  Positioned(
+                    top: 24,
+                    right: 24,
+                    child: GestureDetector(
+                      onTap: _toggleSelfieMode,
+                      child: const Icon(
+                        Icons.cameraswitch_rounded,
+                        size: 36,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }
