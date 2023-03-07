@@ -47,5 +47,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- For Camera https://pub.dev/packages/camera -->
+	<key>NSCameraUsageDescription</key>
+	<string>Upload Video for TiktokClone</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Upload Video for TiktokClone</string>
 </dict>
 </plist>
