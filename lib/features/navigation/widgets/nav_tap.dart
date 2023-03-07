@@ -10,7 +10,7 @@ class NavTap extends StatelessWidget {
   final IconData icon;
   final IconData selectedIcon;
   final VoidCallback onTap;
-  final Color selectedColor = Colors.white;
+  final int selectedIndex;
   const NavTap({
     super.key,
     required this.text,
@@ -18,6 +18,7 @@ class NavTap extends StatelessWidget {
     required this.icon,
     required this.selectedIcon,
     required this.onTap,
+    required this.selectedIndex,
   });
 
   @override
@@ -26,7 +27,7 @@ class NavTap extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          color: Colors.black,
+          color: selectedIndex == 0 ? Colors.black : Colors.white,
           child: AnimatedOpacity(
             opacity: isSelected ? 1 : 0.6,
             duration: const Duration(
@@ -35,11 +36,16 @@ class NavTap extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                FaIcon(isSelected ? selectedIcon : icon, color: selectedColor),
+                FaIcon(
+                  isSelected ? selectedIcon : icon,
+                  color: selectedIndex == 0 ? Colors.white : Colors.black,
+                ),
                 Gaps.v10,
                 Text(
                   text,
-                  style: TextStyle(color: selectedColor),
+                  style: TextStyle(
+                    color: selectedIndex == 0 ? Colors.white : Colors.black,
+                  ),
                 ),
               ],
             ),

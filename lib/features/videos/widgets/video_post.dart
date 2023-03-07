@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/assets/image.dart';
+import 'package:flutter_ticktoc/assets/video.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/widgets/video_comments.dart';
@@ -30,7 +32,7 @@ class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/IMG_1050.MOV");
+      VideoPlayerController.asset(ExampleVideo.example1);
   bool _isPaused = false;
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
@@ -79,6 +81,9 @@ class _VideoPostState extends State<VideoPost>
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
+    }
+    if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
+      _onTogglePause();
     }
   }
 
@@ -222,7 +227,8 @@ class _VideoPostState extends State<VideoPost>
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                     foregroundImage: NetworkImage(
-                        "https://avatars.githubusercontent.com/u/639005?v=4"),
+                      ExampleImage.profile1,
+                    ),
                     child: Text(
                       "니꼬",
                     ),
