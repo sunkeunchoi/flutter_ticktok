@@ -29,6 +29,6 @@ SPEC CHECKSUMS:
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
 
-PODFILE CHECKSUM: a355fa7f3cf7df23021565fccd8d16fc3119fd81
+PODFILE CHECKSUM: 4b084ebece7c81b1bcec639f2fbec515b342b518
 
 COCOAPODS: 1.12.0
