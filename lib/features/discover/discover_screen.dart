@@ -91,8 +91,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       child: FadeInImage.assetNetwork(
                         fit: BoxFit.cover,
                         placeholder: ExampleImage.example1,
-                        image:
-                            "https://images.unsplash.com/photo-1525340581945-d5e2b09641c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                        image: ExampleImage.network1,
                       ),
                     ),
                   ),
