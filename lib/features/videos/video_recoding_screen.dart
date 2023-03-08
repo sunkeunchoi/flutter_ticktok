@@ -68,6 +68,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   }
 
   Future<void> _setFlashMode(FlashMode newFlashMode) async {
+    // FlashMode is not supported in SelfieMode
+    if (_isSelfieMode) return;
     await _cameraController.setFlashMode(newFlashMode);
     setState(() {
       _flashMode = newFlashMode;
@@ -229,55 +231,74 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                           color: Colors.white,
                         ),
                       ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.off),
-                        child: Icon(
-                          Icons.flash_off_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.off
-                              ? Colors.amberAccent
-                              : Colors.white,
+                      if (!_isSelfieMode) ...[
+                        const Divider(color: Colors.transparent),
+                        FlashModeWidget(
+                          currentMode: _flashMode,
+                          flashMode: FlashMode.off,
+                          onTap: _setFlashMode,
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.always),
-                        child: Icon(
-                          Icons.flash_on_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.always
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        FlashModeWidget(
+                          currentMode: _flashMode,
+                          flashMode: FlashMode.always,
+                          onTap: _setFlashMode,
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.auto),
-                        child: Icon(
-                          Icons.flash_auto_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.auto
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        FlashModeWidget(
+                          currentMode: _flashMode,
+                          flashMode: FlashMode.auto,
+                          onTap: _setFlashMode,
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.torch),
-                        child: Icon(
-                          Icons.flashlight_on_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.torch
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        FlashModeWidget(
+                          currentMode: _flashMode,
+                          flashMode: FlashMode.torch,
+                          onTap: _setFlashMode,
                         ),
-                      ),
+                      ]
                     ],
                   ),
                 )
               ],
             ),
+    );
+  }
+}
+
+extension on FlashMode {
+  IconData getIcon() {
+    switch (this) {
+      case FlashMode.off:
+        return Icons.flash_off_rounded;
+      case FlashMode.auto:
+        return Icons.flash_auto_rounded;
+      case FlashMode.always:
+        return Icons.flash_on_rounded;
+      case FlashMode.torch:
+        return Icons.flashlight_on_rounded;
+    }
+  }
+}
+
+class FlashModeWidget extends StatelessWidget {
+  const FlashModeWidget(
+      {super.key,
+      required this.onTap,
+      required this.flashMode,
+      required this.currentMode});
+  final Function(FlashMode) onTap;
+  final FlashMode flashMode;
+  final FlashMode currentMode;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onTap(flashMode),
+      child: Icon(
+        flashMode.getIcon(),
+        size: 36,
+        color: currentMode == flashMode ? Colors.amberAccent : Colors.white,
+      ),
     );
   }
 }
