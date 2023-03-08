@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/features/videos/widgets/default_loading.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreviewScreen extends StatefulWidget {
@@ -43,6 +44,15 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     initVideo();
   }
 
+  bool _savedVideo = false;
+  Future<void> _saveToGallery() async {
+    if (_savedVideo) return;
+    await GallerySaver.saveVideo(widget.video.path, albumName: "TikTok Clone");
+    setState(() {
+      _savedVideo = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +60,14 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
         title: const Text(
           'Video Preview',
         ),
+        actions: [
+          IconButton(
+            onPressed: _saveToGallery,
+            icon: Icon(
+              _savedVideo ? Icons.check_circle_rounded : Icons.save_rounded,
+            ),
+          ),
+        ],
       ),
       body: !_videoPlayerController.value.isInitialized
           ? const DefaultLoading(message: "Preparing video")

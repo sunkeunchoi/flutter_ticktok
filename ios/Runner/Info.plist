@@ -52,5 +52,8 @@
 	<string>Upload Video for TiktokClone</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Upload Video for TiktokClone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<!-- For Gallery https://pub.dev/packages/gallery_saver -->
+	<string>Save Video for TiktokClone</string>
 </dict>
 </plist>

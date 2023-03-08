@@ -33,6 +33,7 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.3.0
+  gallery_saver: ^2.3.2
   permission_handler: ^10.2.0
   video_player: ^2.5.1
   visibility_detector: ^0.3.3
