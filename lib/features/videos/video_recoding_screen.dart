@@ -140,16 +140,17 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   }
 
   Future<void> _startRecording() async {
-    if (_cameraController.value.isRecordingVideo) return;
-    await _cameraController.startVideoRecording();
     _buttonAnimationController.forward();
     _progressAnimationController.forward();
+    if (!_isCameraInitialized) return;
+    if (_cameraController.value.isRecordingVideo) return;
+    await _cameraController.startVideoRecording();
   }
 
   Future<void> _stopRecording() async {
     _buttonAnimationController.reverse();
     _progressAnimationController.reset();
-    if (!_cameraController.value.isRecordingVideo) return;
+    if (!_isCameraInitialized) return;
     final video = await _cameraController.stopVideoRecording();
     if (!mounted) return;
     Navigator.of(context).push(VideoPreviewScreen.route(
