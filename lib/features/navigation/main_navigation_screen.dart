@@ -3,7 +3,7 @@ import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/features/discover/discover_screen.dart';
 import 'package:flutter_ticktoc/features/inbox/inbox_screen.dart';
 import 'package:flutter_ticktoc/features/user/user_profile_screen.dart';
-import 'package:flutter_ticktoc/features/videos/post_video_screen.dart';
+import 'package:flutter_ticktoc/features/videos/video_recoding_screen.dart';
 import 'package:flutter_ticktoc/features/videos/video_timeline_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -27,8 +27,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 
   void _onPostVideoButtonTap() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const PostVideoScreen()));
+    Navigator.of(context).push(VideoRecodingScreen.route());
   }
 
   @override
