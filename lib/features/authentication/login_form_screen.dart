@@ -6,7 +6,8 @@ import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
 
 class LoginFormScreen extends StatefulWidget {
   const LoginFormScreen({super.key});
-
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const LoginFormScreen());
   @override
   State<LoginFormScreen> createState() => _LoginFormScreenState();
 }

@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/navigation/main_navigation_screen.dart';
+import 'package:flutter_ticktoc/common/widgets/navigation/main_navigation_screen.dart';
 
 class TutorialScreen extends StatefulWidget {
   const TutorialScreen({super.key});
-
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const TutorialScreen());
   @override
   State<TutorialScreen> createState() => _TutorialScreenState();
 }

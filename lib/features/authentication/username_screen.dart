@@ -7,6 +7,9 @@ import 'widgets/form_button.dart';
 
 class UsernameScreen extends StatefulWidget {
   const UsernameScreen({super.key});
+  static Route route() => MaterialPageRoute(
+        builder: (context) => const UsernameScreen(),
+      );
 
   @override
   State<UsernameScreen> createState() => _UsernameScreenState();
@@ -35,11 +38,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
     if (_username.isEmpty) {
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const EmailScreen(),
-      ),
-    );
+    Navigator.push(context, EmailScreen.router(username: _username));
   }
 
   @override

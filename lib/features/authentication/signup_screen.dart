@@ -5,24 +5,24 @@ import 'package:flutter_ticktoc/features/authentication/username_screen.dart';
 import 'package:flutter_ticktoc/features/authentication/login_screen.dart';
 import 'package:flutter_ticktoc/features/authentication/widgets/auth_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatelessWidget {
+  static const String routeName = "signUp";
+  static const String routeURL = "/";
+  static Route route() => MaterialPageRoute(
+        builder: (context) => const SignUpScreen(),
+      );
   const SignUpScreen({super.key});
-  void onLoginTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
-  }
 
-  void onEmailTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const UsernameScreen()));
-  }
+  void onLoginTap(BuildContext context) =>
+      context.pushNamed(LoginScreen.routeName);
 
-  void onSignupTap(BuildContext context) => Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => const UsernameScreen()));
+  void onEmailTap(BuildContext context) =>
+      Navigator.push(context, UsernameScreen.route());
+
+  void onSignupTap(BuildContext context) =>
+      Navigator.push(context, UsernameScreen.route());
 
   @override
   Widget build(BuildContext context) {

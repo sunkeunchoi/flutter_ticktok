@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/videos/video_recoding_screen.dart';
+
+import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
@@ -47,8 +49,6 @@ class App extends StatelessWidget {
         splashColor: Colors.transparent,
         // highlightColor: Colors.transparent
       ),
-      // home: const SignUpScreen(),
-      home: const VideoRecodingScreen(),
     );
   }
 }
