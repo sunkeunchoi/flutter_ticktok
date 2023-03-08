@@ -3,6 +3,7 @@ import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/authentication/login_form_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import 'widgets/auth_button.dart';
 
@@ -10,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   static const String routeName = "login";
   static const String routeURL = "/login";
   const LoginScreen({super.key});
-  void onSinupTap(BuildContext context) => Navigator.of(context).pop();
+  void onSinupTap(BuildContext context) => context.pop();
 
   void onEmailTap(BuildContext context) =>
       Navigator.push(context, LoginFormScreen.route());

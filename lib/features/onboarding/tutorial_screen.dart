@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/common/widgets/navigation/main_navigation_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class TutorialScreen extends StatefulWidget {
   const TutorialScreen({super.key});
@@ -34,12 +34,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
     });
   }
 
-  void _onEnterAppTap() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-      (route) => false,
-    );
-  }
+  void _onEnterAppTap() => context.go("/home");
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +107,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               duration: _duration,
               opacity: _showingPage == Pages.first ? 0 : 1,
               child: CupertinoButton(
-                onPressed: () {},
+                onPressed: _onEnterAppTap,
                 color: Theme.of(context).primaryColor,
                 child: const Text(
                   "Enter the app!",
