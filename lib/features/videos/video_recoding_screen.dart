@@ -3,10 +3,10 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_ticktoc/features/videos/video_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'widgets/default_loading.dart';
 
 class VideoRecodingScreen extends StatefulWidget {
@@ -25,7 +25,9 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   late CameraController _cameraController;
   bool _hasPermission = false;
   bool _isSelfieMode = true;
+  bool _isCameraInitialized = false;
   late FlashMode _flashMode;
+
   late final AnimationController _progressAnimationController =
       AnimationController(
     vsync: this,
@@ -33,16 +35,19 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     lowerBound: 0.0,
     upperBound: 1.0,
   );
+
   late final AnimationController _buttonAnimationController =
       AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 100),
   );
+
   late final Animation<double> _buttonAnimation =
       Tween<double>(begin: 1.0, end: 1.2).animate(_buttonAnimationController);
-  Future<void> initCamera() async {
+
+  Future<bool> initCamera() async {
     final cameras = await availableCameras();
-    if (cameras.isEmpty || cameras.length < 2) return;
+    if (cameras.isEmpty || cameras.length < 2) return false;
     _cameraController = CameraController(
       _isSelfieMode ? cameras[1] : cameras[0],
       ResolutionPreset.max,
@@ -50,21 +55,50 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     await _cameraController.initialize();
     await _cameraController.prepareForVideoRecording();
     _flashMode = _cameraController.value.flashMode;
-    setState(() {});
+    final isCameraInitialized = _cameraController.value.isInitialized;
+    setState(() {
+      _isCameraInitialized = isCameraInitialized;
+    });
+    return isCameraInitialized;
   }
 
-  Future<void> initPermissions() async {
+  Future<bool> checkPermissions() async {
     final cameraPermission = await Permission.camera.request();
     final microphonePermission = await Permission.microphone.request();
     final cameraDenied =
         cameraPermission.isDenied || cameraPermission.isPermanentlyDenied;
     final microphoneDenied = microphonePermission.isDenied ||
         microphonePermission.isPermanentlyDenied;
-    if (!cameraDenied && !microphoneDenied) {
-      setState(() {
-        _hasPermission = true;
-      });
-    } else {}
+    final hasPermission = !cameraDenied && !microphoneDenied;
+    setState(() {
+      _hasPermission = hasPermission;
+    });
+    return hasPermission;
+  }
+
+  Future<void> initializePermissionAndCamera() async {
+    final hasPermissions = await checkPermissions();
+    if (hasPermissions) {
+      await initCamera();
+    } else {
+      if (!mounted) return;
+      await showDialog(
+        barrierColor: Theme.of(context).colorScheme.surface,
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Access required"),
+          content: const Text(
+              "To use TickTok Clone App, allow Camera and Microphone access."),
+          actions: [
+            TextButton(
+              onPressed: () => openAppSettings(),
+              child: const Text("Open settings"),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   Future<void> _setFlashMode(FlashMode newFlashMode) async {
@@ -91,8 +125,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    initPermissions();
-    initCamera();
+    initializePermissionAndCamera();
     _progressAnimationController.addListener(() {
       setState(() {});
     });
@@ -108,13 +141,12 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     log(state.toString());
     switch (state) {
       case AppLifecycleState.resumed:
-        if (_cameraController.value.isInitialized) break;
-        await initCamera();
+        await initializePermissionAndCamera();
         break;
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.paused:
-        if (!_cameraController.value.isInitialized) break;
+        if (!_hasPermission || !_isCameraInitialized) break;
         _cameraController.dispose();
         break;
       case AppLifecycleState.detached:
@@ -132,7 +164,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   Future<void> _stopRecording() async {
     _buttonAnimationController.reverse();
     _progressAnimationController.reset();
-    if (!_cameraController.value.isRecordingVideo) return;
+    if (!_hasPermission || !_cameraController.value.isRecordingVideo) return;
     final video = await _cameraController.stopVideoRecording();
     if (!mounted) return;
     Navigator.of(context).push(VideoPreviewScreen.route(
@@ -156,7 +188,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !_hasPermission || !_cameraController.value.isInitialized
+      body: !_hasPermission || !_isCameraInitialized
           ? const DefaultLoading(message: "Requesting permissions")
           : Stack(
               alignment: Alignment.center,
