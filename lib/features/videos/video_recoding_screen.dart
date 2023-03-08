@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/features/videos/video_preview_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'widgets/default_loading.dart';
 
 class VideoRecodingScreen extends StatefulWidget {
   static String routeName = "/video_recoding";
@@ -42,7 +45,9 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
       ResolutionPreset.max,
     );
     await _cameraController.initialize();
+    await _cameraController.prepareForVideoRecording();
     _flashMode = _cameraController.value.flashMode;
+    setState(() {});
   }
 
   Future<void> initPermissions() async {
@@ -69,7 +74,14 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   Future<void> _toggleSelfieMode() async {
     _isSelfieMode = !_isSelfieMode;
     await initCamera();
-    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    _progressAnimationController.dispose();
+    _buttonAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -87,19 +99,27 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     });
   }
 
-  void _startRecording(TapDownDetails details) {
+  Future<void> _startRecording() async {
+    if (_cameraController.value.isRecordingVideo) return;
+    await _cameraController.startVideoRecording();
     _buttonAnimationController.forward();
     _progressAnimationController.forward();
   }
 
-  void _stopRecording() {
+  void _pushPreviewScreen(video) {
+    Navigator.of(context).push(VideoPreviewScreen.route(video));
+  }
+
+  Future<void> _stopRecording() async {
     _buttonAnimationController.reverse();
     _progressAnimationController.reset();
+    if (!_cameraController.value.isRecordingVideo) return;
+    final video = await _cameraController.stopVideoRecording();
+    _pushPreviewScreen(video);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_progressAnimationController.value);
     return Scaffold(
       body: !_hasPermission || !_cameraController.value.isInitialized
           ? const DefaultLoading(message: "Requesting permissions")
@@ -111,7 +131,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                   Positioned(
                     bottom: 48,
                     child: GestureDetector(
-                      onTapDown: _startRecording,
+                      onTapDown: (_) => _startRecording(),
                       onTapUp: (_) => _stopRecording(),
                       onLongPressEnd: (_) => _stopRecording(),
                       child: ScaleTransition(
@@ -205,33 +225,6 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                 ],
               ),
             ),
-    );
-  }
-}
-
-class DefaultLoading extends StatelessWidget {
-  const DefaultLoading({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
-
-  final String message;
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            message,
-            style: textTheme.titleLarge,
-          ),
-          const Divider(color: Colors.transparent),
-          const CircularProgressIndicator.adaptive(),
-        ],
-      ),
     );
   }
 }
