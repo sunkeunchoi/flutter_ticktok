@@ -2,6 +2,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/features/videos/video_preview_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'widgets/default_loading.dart';
@@ -106,16 +107,28 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     _progressAnimationController.forward();
   }
 
-  void _pushPreviewScreen(video) {
-    Navigator.of(context).push(VideoPreviewScreen.route(video));
-  }
-
   Future<void> _stopRecording() async {
     _buttonAnimationController.reverse();
     _progressAnimationController.reset();
     if (!_cameraController.value.isRecordingVideo) return;
     final video = await _cameraController.stopVideoRecording();
-    _pushPreviewScreen(video);
+    if (!mounted) return;
+    Navigator.of(context).push(VideoPreviewScreen.route(
+      video: video,
+      isFromGallery: false,
+    ));
+  }
+
+  Future<void> _onPickVideoPressed() async {
+    final video = await ImagePicker().pickVideo(
+      source: ImageSource.gallery,
+    );
+    if (video == null) return;
+    if (!mounted) return;
+    Navigator.of(context).push(VideoPreviewScreen.route(
+      video: video,
+      isFromGallery: true,
+    ));
   }
 
   @override
@@ -123,107 +136,125 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     return Scaffold(
       body: !_hasPermission || !_cameraController.value.isInitialized
           ? const DefaultLoading(message: "Requesting permissions")
-          : Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CameraPreview(_cameraController),
-                  Positioned(
-                    bottom: 48,
-                    child: GestureDetector(
-                      onTapDown: (_) => _startRecording(),
-                      onTapUp: (_) => _stopRecording(),
-                      onLongPressEnd: (_) => _stopRecording(),
-                      child: ScaleTransition(
-                        scale: _buttonAnimation,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SizedBox(
-                              width: 96,
-                              height: 96,
-                              child: CircularProgressIndicator(
-                                color: Colors.redAccent,
-                                strokeWidth: 6,
-                                value: _progressAnimationController.value,
+          : Stack(
+              alignment: Alignment.center,
+              children: [
+                CameraPreview(_cameraController),
+                Positioned(
+                  bottom: 48,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      GestureDetector(
+                        onTapDown: (_) => _startRecording(),
+                        onTapUp: (_) => _stopRecording(),
+                        onLongPressEnd: (_) => _stopRecording(),
+                        child: ScaleTransition(
+                          scale: _buttonAnimation,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SizedBox(
+                                width: 96,
+                                height: 96,
+                                child: CircularProgressIndicator(
+                                  color: Colors.redAccent,
+                                  strokeWidth: 6,
+                                  value: _progressAnimationController.value,
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: 84,
-                              height: 84,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.redAccent,
+                              Container(
+                                width: 84,
+                                height: 84,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.redAccent,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 24,
-                    right: 24,
-                    child: Column(
-                      children: [
-                        const Divider(color: Colors.transparent),
-                        GestureDetector(
-                          onTap: _toggleSelfieMode,
-                          child: const Icon(
-                            Icons.cameraswitch_rounded,
-                            size: 36,
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 12),
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            iconSize: 42,
                             color: Colors.white,
+                            padding: const EdgeInsets.all(12),
+                            icon: const Icon(Icons.image_outlined),
+                            onPressed: _onPickVideoPressed,
                           ),
                         ),
-                        const Divider(color: Colors.transparent),
-                        GestureDetector(
-                          onTap: () => _setFlashMode(FlashMode.off),
-                          child: Icon(
-                            Icons.flash_off_rounded,
-                            size: 36,
-                            color: _flashMode == FlashMode.off
-                                ? Colors.amberAccent
-                                : Colors.white,
-                          ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 24,
+                  right: 24,
+                  child: Column(
+                    children: [
+                      const Divider(color: Colors.transparent),
+                      GestureDetector(
+                        onTap: _toggleSelfieMode,
+                        child: const Icon(
+                          Icons.cameraswitch_rounded,
+                          size: 36,
+                          color: Colors.white,
                         ),
-                        const Divider(color: Colors.transparent),
-                        GestureDetector(
-                          onTap: () => _setFlashMode(FlashMode.always),
-                          child: Icon(
-                            Icons.flash_on_rounded,
-                            size: 36,
-                            color: _flashMode == FlashMode.always
-                                ? Colors.amberAccent
-                                : Colors.white,
-                          ),
+                      ),
+                      const Divider(color: Colors.transparent),
+                      GestureDetector(
+                        onTap: () => _setFlashMode(FlashMode.off),
+                        child: Icon(
+                          Icons.flash_off_rounded,
+                          size: 36,
+                          color: _flashMode == FlashMode.off
+                              ? Colors.amberAccent
+                              : Colors.white,
                         ),
-                        const Divider(color: Colors.transparent),
-                        GestureDetector(
-                          onTap: () => _setFlashMode(FlashMode.auto),
-                          child: Icon(
-                            Icons.flash_auto_rounded,
-                            size: 36,
-                            color: _flashMode == FlashMode.auto
-                                ? Colors.amberAccent
-                                : Colors.white,
-                          ),
+                      ),
+                      const Divider(color: Colors.transparent),
+                      GestureDetector(
+                        onTap: () => _setFlashMode(FlashMode.always),
+                        child: Icon(
+                          Icons.flash_on_rounded,
+                          size: 36,
+                          color: _flashMode == FlashMode.always
+                              ? Colors.amberAccent
+                              : Colors.white,
                         ),
-                        const Divider(color: Colors.transparent),
-                        GestureDetector(
-                          onTap: () => _setFlashMode(FlashMode.torch),
-                          child: Icon(
-                            Icons.flashlight_on_rounded,
-                            size: 36,
-                            color: _flashMode == FlashMode.torch
-                                ? Colors.amberAccent
-                                : Colors.white,
-                          ),
+                      ),
+                      const Divider(color: Colors.transparent),
+                      GestureDetector(
+                        onTap: () => _setFlashMode(FlashMode.auto),
+                        child: Icon(
+                          Icons.flash_auto_rounded,
+                          size: 36,
+                          color: _flashMode == FlashMode.auto
+                              ? Colors.amberAccent
+                              : Colors.white,
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                      const Divider(color: Colors.transparent),
+                      GestureDetector(
+                        onTap: () => _setFlashMode(FlashMode.torch),
+                        child: Icon(
+                          Icons.flashlight_on_rounded,
+                          size: 36,
+                          color: _flashMode == FlashMode.torch
+                              ? Colors.amberAccent
+                              : Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
     );
   }

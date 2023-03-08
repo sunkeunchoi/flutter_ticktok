@@ -47,13 +47,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- For ImagePicker https://pub.dev/packages/image_picker -->
 	<!-- For Camera https://pub.dev/packages/camera -->
 	<key>NSCameraUsageDescription</key>
 	<string>Upload Video for TiktokClone</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Upload Video for TiktokClone</string>
-	<key>NSPhotoLibraryUsageDescription</key>
+	<!-- For ImagePicker https://pub.dev/packages/image_picker -->
 	<!-- For Gallery https://pub.dev/packages/gallery_saver -->
+	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Save Video for TiktokClone</string>
 </dict>
 </plist>

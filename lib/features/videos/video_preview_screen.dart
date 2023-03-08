@@ -9,14 +9,22 @@ import 'package:video_player/video_player.dart';
 class VideoPreviewScreen extends StatefulWidget {
   static String routeName = "/video_preview";
   static String routePath = "/video_preview";
-  static Route route(XFile video) =>
-      MaterialPageRoute(builder: (context) => VideoPreviewScreen(video: video));
+  static Route route({
+    required XFile video,
+    required bool isFromGallery,
+  }) =>
+      MaterialPageRoute(
+          builder: (context) => VideoPreviewScreen(
+                video: video,
+                isFromGallery: isFromGallery,
+              ));
   const VideoPreviewScreen({
     super.key,
     required this.video,
+    required this.isFromGallery,
   });
   final XFile video;
-
+  final bool isFromGallery;
   @override
   State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
 }
@@ -61,12 +69,13 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
           'Video Preview',
         ),
         actions: [
-          IconButton(
-            onPressed: _saveToGallery,
-            icon: Icon(
-              _savedVideo ? Icons.check_circle_rounded : Icons.save_rounded,
+          if (!widget.isFromGallery)
+            IconButton(
+              onPressed: _saveToGallery,
+              icon: Icon(
+                _savedVideo ? Icons.check_circle_rounded : Icons.save_rounded,
+              ),
             ),
-          ),
         ],
       ),
       body: !_videoPlayerController.value.isInitialized
