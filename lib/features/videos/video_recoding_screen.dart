@@ -1,7 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/features/videos/video_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,6 +26,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   late CameraController _cameraController;
   bool _hasPermission = false;
   bool _isSelfieMode = true;
+  bool _isCameraInitialized = false;
+  late final bool _noCamera = kDebugMode && Platform.isIOS;
   late FlashMode _flashMode;
   late final AnimationController _progressAnimationController =
       AnimationController(
@@ -41,6 +44,9 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   late final Animation<double> _buttonAnimation =
       Tween<double>(begin: 1.0, end: 1.2).animate(_buttonAnimationController);
   Future<void> initCamera() async {
+    setState(() {
+      _isCameraInitialized = false;
+    });
     final cameras = await availableCameras();
     if (cameras.isEmpty || cameras.length < 2) return;
     _cameraController = CameraController(
@@ -50,10 +56,15 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
     await _cameraController.initialize();
     await _cameraController.prepareForVideoRecording();
     _flashMode = _cameraController.value.flashMode;
-    setState(() {});
+    setState(() {
+      _isCameraInitialized = true;
+    });
   }
 
   Future<void> initPermissions() async {
+    setState(() {
+      _hasPermission = false;
+    });
     final cameraPermission = await Permission.camera.request();
     final microphonePermission = await Permission.microphone.request();
     final cameraDenied =
@@ -64,7 +75,8 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
       setState(() {
         _hasPermission = true;
       });
-    } else {}
+      await initCamera();
+    }
   }
 
   Future<void> _setFlashMode(FlashMode newFlashMode) async {
@@ -90,9 +102,15 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   @override
   void initState() {
     super.initState();
+    if (!_noCamera) {
+      initPermissions();
+    } else {
+      setState(() {
+        _hasPermission = true;
+      });
+    }
     WidgetsBinding.instance.addObserver(this);
-    initPermissions();
-    initCamera();
+
     _progressAnimationController.addListener(() {
       setState(() {});
     });
@@ -105,16 +123,15 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    log(state.toString());
+    if (!_hasPermission) return;
+    if (!_isCameraInitialized) return;
     switch (state) {
       case AppLifecycleState.resumed:
-        if (_cameraController.value.isInitialized) break;
         await initCamera();
         break;
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.paused:
-        if (!_cameraController.value.isInitialized) break;
         _cameraController.dispose();
         break;
       case AppLifecycleState.detached:
@@ -156,12 +173,13 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !_hasPermission || !_cameraController.value.isInitialized
+      body: !_hasPermission
           ? const DefaultLoading(message: "Requesting permissions")
           : Stack(
               alignment: Alignment.center,
               children: [
-                CameraPreview(_cameraController),
+                if (!_noCamera && _isCameraInitialized)
+                  CameraPreview(_cameraController),
                 Positioned(
                   bottom: 48,
                   width: MediaQuery.of(context).size.width,
@@ -215,67 +233,68 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                     ],
                   ),
                 ),
-                Positioned(
-                  top: 24,
-                  right: 24,
-                  child: Column(
-                    children: [
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: _toggleSelfieMode,
-                        child: const Icon(
-                          Icons.cameraswitch_rounded,
-                          size: 36,
-                          color: Colors.white,
+                if (!_noCamera)
+                  Positioned(
+                    top: 24,
+                    right: 24,
+                    child: Column(
+                      children: [
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: _toggleSelfieMode,
+                          child: const Icon(
+                            Icons.cameraswitch_rounded,
+                            size: 36,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.off),
-                        child: Icon(
-                          Icons.flash_off_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.off
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.off),
+                          child: Icon(
+                            Icons.flash_off_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.off
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.always),
-                        child: Icon(
-                          Icons.flash_on_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.always
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.always),
+                          child: Icon(
+                            Icons.flash_on_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.always
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.auto),
-                        child: Icon(
-                          Icons.flash_auto_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.auto
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.auto),
+                          child: Icon(
+                            Icons.flash_auto_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.auto
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
                         ),
-                      ),
-                      const Divider(color: Colors.transparent),
-                      GestureDetector(
-                        onTap: () => _setFlashMode(FlashMode.torch),
-                        child: Icon(
-                          Icons.flashlight_on_rounded,
-                          size: 36,
-                          color: _flashMode == FlashMode.torch
-                              ? Colors.amberAccent
-                              : Colors.white,
+                        const Divider(color: Colors.transparent),
+                        GestureDetector(
+                          onTap: () => _setFlashMode(FlashMode.torch),
+                          child: Icon(
+                            Icons.flashlight_on_rounded,
+                            size: 36,
+                            color: _flashMode == FlashMode.torch
+                                ? Colors.amberAccent
+                                : Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
+                      ],
+                    ),
+                  )
               ],
             ),
     );
