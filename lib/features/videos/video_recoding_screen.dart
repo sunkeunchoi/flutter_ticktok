@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/features/videos/video_preview_screen.dart';
@@ -19,7 +21,7 @@ class VideoRecodingScreen extends StatefulWidget {
 }
 
 class _VideoRecodingScreenState extends State<VideoRecodingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late CameraController _cameraController;
   bool _hasPermission = false;
   bool _isSelfieMode = true;
@@ -88,6 +90,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initPermissions();
     initCamera();
     _progressAnimationController.addListener(() {
@@ -98,6 +101,25 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
         _stopRecording();
       }
     });
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    log(state.toString());
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (_cameraController.value.isInitialized) break;
+        await initCamera();
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        if (!_cameraController.value.isInitialized) break;
+        _cameraController.dispose();
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
   }
 
   Future<void> _startRecording() async {
