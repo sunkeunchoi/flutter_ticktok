@@ -190,9 +190,9 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: () {},
+                onPressed: VideoConfigurationData.of(context).toggleMuted,
                 icon: Icon(
-                  VideoConfiguration.of(context).autoMute
+                  VideoConfigurationData.of(context).autoMute
                       ? Icons.volume_off
                       : Icons.volume_up_rounded,
                   color: Colors.white,
