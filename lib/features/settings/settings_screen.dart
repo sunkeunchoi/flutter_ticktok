@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/common/IconImageProvider.dart';
-import 'package:flutter_ticktoc/features/videos/view_models/playback_config_vm.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -36,14 +34,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SwitchListTile.adaptive(
             title: const Text("Mute video"),
             subtitle: const Text("Video will be muted by default."),
-            value: context.watch<PlaybackConfigViewModel>().isMuted,
-            onChanged: context.read<PlaybackConfigViewModel>().setMuted,
+            value: false,
+            onChanged: (value) {},
           ),
           SwitchListTile.adaptive(
             title: const Text("Auto play"),
             subtitle: const Text("Video will start playing automatically"),
-            value: context.watch<PlaybackConfigViewModel>().isAutoPlay,
-            onChanged: context.read<PlaybackConfigViewModel>().setAutoPlay,
+            value: false,
+            onChanged: (value) {},
           ),
           CheckboxListTile(value: false, onChanged: (value) {}),
           RadioListTile(
