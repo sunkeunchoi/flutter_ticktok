@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/assets/video.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
@@ -14,7 +15,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'video_button.dart';
 
-class VideoPost extends StatefulWidget {
+class VideoPost extends ConsumerStatefulWidget {
   final VoidCallback onVideoFinished;
   final int index;
   final String description;
@@ -28,10 +29,10 @@ class VideoPost extends StatefulWidget {
         super(key: key);
 
   @override
-  State<VideoPost> createState() => _VideoPostState();
+  VideoPostState createState() => VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost>
+class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   final VideoPlayerController _videoPlayerController =
@@ -83,8 +84,9 @@ class _VideoPostState extends State<VideoPost>
 
   void _onPlaybackConfigChanged() {
     if (!mounted) return;
-    const isMuted = true;
-    if (isMuted) {
+    final muted = ref.read(playbackConfigProvider).muted;
+    ref.read(playbackConfigProvider.notifier).setMuted(!muted);
+    if (!muted) {
       _videoPlayerController.setVolume(0);
     } else {
       _videoPlayerController.setVolume(1);
@@ -96,8 +98,9 @@ class _VideoPostState extends State<VideoPost>
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
-      const isAutoPlay = false;
-      if (isAutoPlay) _videoPlayerController.play();
+      if (ref.read(playbackConfigProvider).autoPlay) {
+        _videoPlayerController.play();
+      }
     }
     if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
       _onTogglePause();
@@ -203,9 +206,11 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  false ? Icons.volume_off : Icons.volume_up_rounded,
+                onPressed: _onPlaybackConfigChanged,
+                icon: Icon(
+                  ref.watch(playbackConfigProvider).muted
+                      ? Icons.volume_off
+                      : Icons.volume_up_rounded,
                   color: Colors.white,
                 ),
               ),
