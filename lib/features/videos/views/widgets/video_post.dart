@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/assets/video.dart';
-import 'package:flutter_ticktoc/common/widgets/video_configuration/video_configuration.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
+import 'package:flutter_ticktoc/features/videos/view_models/playback_config_vm.dart';
 import 'package:flutter_ticktoc/features/videos/views/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +72,9 @@ class _VideoPostState extends State<VideoPost>
       value: 2.5,
       duration: _animationDuration,
     );
+    context
+        .read<PlaybackConfigViewModel>()
+        .addListener(_onPlaybackConfigChanged);
   }
 
   @override
@@ -81,12 +84,23 @@ class _VideoPostState extends State<VideoPost>
     super.dispose();
   }
 
+  void _onPlaybackConfigChanged() {
+    if (!mounted) return;
+    final isMuted = context.read<PlaybackConfigViewModel>().isMuted;
+    if (isMuted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+  }
+
   void _onVisibilityChanged(VisibilityInfo info) {
     if (!mounted) return;
     if (info.visibleFraction == 1 &&
         !_isPaused &&
         !_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.play();
+      final isAutoPlay = context.read<PlaybackConfigViewModel>().isAutoPlay;
+      if (isAutoPlay) _videoPlayerController.play();
     }
     if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
       _onTogglePause();
@@ -192,9 +206,11 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  false ? Icons.volume_off : Icons.volume_up_rounded,
+                onPressed: context.read<PlaybackConfigViewModel>().toggleMuted,
+                icon: Icon(
+                  context.watch<PlaybackConfigViewModel>().isMuted
+                      ? Icons.volume_off
+                      : Icons.volume_up_rounded,
                   color: Colors.white,
                 ),
               ),
