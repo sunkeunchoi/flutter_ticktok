@@ -5,8 +5,12 @@ import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({super.key});
-
+  const ChatDetailScreen({super.key, required this.chatId});
+  static const routeName = "chatDetail";
+  static const routeURL = ":chatId";
+  static Route route({required String chatId}) =>
+      MaterialPageRoute(builder: (context) => ChatDetailScreen(chatId: chatId));
+  final String chatId;
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
@@ -19,9 +23,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         title: ListTile(
           contentPadding: EdgeInsets.zero,
           horizontalTitleGap: Sizes.size08,
-          title: const Text(
-            "니꼬",
-            style: TextStyle(
+          title: Text(
+            "니꼬 (${widget.chatId})",
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
             ),
           ),

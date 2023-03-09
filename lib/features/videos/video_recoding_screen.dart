@@ -11,8 +11,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'widgets/default_loading.dart';
 
 class VideoRecodingScreen extends StatefulWidget {
-  static String routeName = "/video_recoding";
-  static String routePath = "/video_recoding";
+  static String routeName = "postVideo";
+  static String routePath = "/upload";
   static Route route() =>
       MaterialPageRoute(builder: (context) => const VideoRecodingScreen());
   const VideoRecodingScreen({super.key});
