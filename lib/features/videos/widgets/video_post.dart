@@ -8,6 +8,7 @@ import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -36,7 +37,7 @@ class _VideoPostState extends State<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset(ExampleVideo.example1);
   bool _isPaused = false;
-  bool _autoMute = videoConfig.value;
+
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
 
@@ -71,11 +72,6 @@ class _VideoPostState extends State<VideoPost>
       value: 2.5,
       duration: _animationDuration,
     );
-    videoConfig.addListener(() {
-      setState(() {
-        _autoMute = videoConfig.value;
-      });
-    });
   }
 
   @override
@@ -196,9 +192,11 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: () => videoConfig.value = !videoConfig.value,
+                onPressed: context.read<VideoConfiguration>().toggleIsMuted,
                 icon: Icon(
-                  _autoMute ? Icons.volume_off : Icons.volume_up_rounded,
+                  context.watch<VideoConfiguration>().isMuted
+                      ? Icons.volume_off
+                      : Icons.volume_up_rounded,
                   color: Colors.white,
                 ),
               ),

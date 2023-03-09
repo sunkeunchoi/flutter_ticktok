@@ -1,3 +1,15 @@
 import 'package:flutter/foundation.dart';
 
-final videoConfig = ValueNotifier(false);
+class VideoConfiguration extends ChangeNotifier {
+  bool isMuted = false;
+  bool isAutoPlay = false;
+  void toggleIsMuted() {
+    isMuted = !isMuted;
+    notifyListeners();
+  }
+
+  void toggleAutoPlay() {
+    isAutoPlay = !isAutoPlay;
+    notifyListeners();
+  }
+}
