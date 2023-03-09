@@ -1,28 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ticktoc/common/IconImageProvider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ticktoc/features/videos/view_models/playback_config_vm.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notifiactions = false;
-  void _onNotificationsChanged(bool? newValue) {
-    if (newValue == null) return;
-    setState(() {
-      _notifiactions = newValue;
-    });
-  }
-
-  List<bool> isSelected = [true, false];
-  bool forImage = false;
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -34,14 +20,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SwitchListTile.adaptive(
             title: const Text("Mute video"),
             subtitle: const Text("Video will be muted by default."),
-            value: false,
-            onChanged: (value) {},
+            value: ref.watch(playbackConfigProvider).muted,
+            onChanged: ref.read(playbackConfigProvider.notifier).setMuted,
           ),
           SwitchListTile.adaptive(
             title: const Text("Auto play"),
             subtitle: const Text("Video will start playing automatically"),
-            value: false,
-            onChanged: (value) {},
+            value: ref.watch(playbackConfigProvider).autoPlay,
+            onChanged: ref.read(playbackConfigProvider.notifier).setAutoPlay,
           ),
           CheckboxListTile(value: false, onChanged: (value) {}),
           RadioListTile(
@@ -49,27 +35,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
             groupValue: null,
             onChanged: (value) {},
           ),
-          Switch(
-            value: forImage,
-            onChanged: (value) => setState(() {
-              forImage = value;
-            }),
-            activeThumbImage: IconImageProvider(
-              Icons.volume_off,
-            ),
-            activeColor: Colors.red,
-            inactiveThumbImage: IconImageProvider(Icons.volume_up),
-            inactiveThumbColor: Colors.blue,
-          ),
-          ToggleButtons(
-            isSelected: isSelected,
-            children: const [Icon(Icons.dark_mode), Icon(Icons.light_mode)],
-            onPressed: (newIndex) => setState(() {
-              isSelected = List<bool>.generate(
-                  isSelected.length, (index) => index == newIndex,
-                  growable: false);
-            }),
-          ),
+          // Switch(
+          //   value: forImage,
+          //   onChanged: (value) => setState(() {
+          //     forImage = value;
+          //   }),
+          //   activeThumbImage: IconImageProvider(
+          //     Icons.volume_off,
+          //   ),
+          //   activeColor: Colors.red,
+          //   inactiveThumbImage: IconImageProvider(Icons.volume_up),
+          //   inactiveThumbColor: Colors.blue,
+          // ),
+          // ToggleButtons(
+          //   isSelected: isSelected,
+          //   children: const [Icon(Icons.dark_mode), Icon(Icons.light_mode)],
+          //   onPressed: (newIndex) => setState(() {
+          //     isSelected = List<bool>.generate(
+          //         isSelected.length, (index) => index == newIndex,
+          //         growable: false);
+          //   }),
+          // ),
           ListTile(
             title: const Text("iOS bottom sheet"),
             textColor: Colors.red,
