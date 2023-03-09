@@ -3,11 +3,12 @@ import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/features/discover/discover_screen.dart';
 import 'package:flutter_ticktoc/features/inbox/inbox_screen.dart';
 import 'package:flutter_ticktoc/features/user/user_profile_screen.dart';
-import 'package:flutter_ticktoc/features/videos/video_recoding_screen.dart';
-import 'package:flutter_ticktoc/features/videos/video_timeline_screen.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../features/videos/views/video_recoding_screen.dart';
+import '../../../features/videos/views/video_timeline_screen.dart';
 import 'widgets/nav_tap.dart';
 import 'widgets/post_video_button.dart';
 
