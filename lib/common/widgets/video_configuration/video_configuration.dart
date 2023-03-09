@@ -1,11 +1,3 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
-class VideoConfiguration extends ChangeNotifier {
-  bool autoMute = false;
-  void toggleAutoMute() {
-    autoMute = !autoMute;
-    notifyListeners();
-  }
-}
-
-final videoConfig = VideoConfiguration();
+final videoConfig = ValueNotifier(false);
