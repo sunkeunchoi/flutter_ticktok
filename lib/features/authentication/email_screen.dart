@@ -6,8 +6,11 @@ import 'password_screen.dart';
 import 'widgets/form_button.dart';
 
 class EmailScreen extends StatefulWidget {
-  const EmailScreen({super.key});
-
+  const EmailScreen({super.key, required this.username});
+  final String username;
+  static Route router({required String username}) => MaterialPageRoute(
+        builder: (context) => EmailScreen(username: username),
+      );
   @override
   State<EmailScreen> createState() => _EmailScreenState();
 }
@@ -48,11 +51,8 @@ class _EmailScreenState extends State<EmailScreen> {
 
   void _onSubmit() {
     if (_email.isEmpty || _isEmailValid() != null) return;
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const PasswordScreen(),
-        ));
+
+    Navigator.push(context, PasswordScreen.route());
   }
 
   @override
@@ -71,9 +71,9 @@ class _EmailScreenState extends State<EmailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v40,
-              const Text(
-                "What is your email",
-                style: TextStyle(
+              Text(
+                "What is your email, ${widget.username}",
+                style: const TextStyle(
                   fontSize: Sizes.size20,
                   fontWeight: FontWeight.w600,
                 ),

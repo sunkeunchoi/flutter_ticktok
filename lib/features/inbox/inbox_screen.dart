@@ -3,24 +3,19 @@ import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/inbox/activity_screen.dart';
 import 'package:flutter_ticktoc/features/inbox/chats_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class InboxScreen extends StatelessWidget {
+  static const String routeName = "inbox";
+  static const String routeURL = "/inbox";
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const InboxScreen());
   const InboxScreen({super.key});
-  void _onDmPressed(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ChatsScreen(),
-      ),
-    );
-  }
+  void _onDmPressed(BuildContext context) =>
+      context.pushNamed(ChatsScreen.routeName);
 
-  void _onActivityTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ActivityScreen(),
-      ),
-    );
-  }
+  void _onActivityTap(BuildContext context) =>
+      context.pushNamed(ActivityScreen.routeName);
 
   @override
   Widget build(BuildContext context) {

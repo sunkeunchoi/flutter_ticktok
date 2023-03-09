@@ -3,8 +3,13 @@ import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/inbox/chat_detail_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatsScreen extends StatefulWidget {
+  static const String routeName = "chats";
+  static const String routeURL = "/chats";
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const ChatsScreen());
   const ChatsScreen({super.key});
 
   @override
@@ -41,18 +46,17 @@ class _ChatsScreenState extends State<ChatsScreen> {
     _items.removeAt(index);
   }
 
-  void _onChatTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ChatDetailScreen(),
-      ),
-    );
-  }
+  void _onChatTap(int index) => context.pushNamed(
+        ChatDetailScreen.routeName,
+        params: {
+          "chatId": index.toString(),
+        },
+      );
 
   Widget _makeTile(int index) {
     return ListTile(
       onLongPress: () => _deleteItem(index),
-      onTap: _onChatTap,
+      onTap: () => _onChatTap(index),
       leading: const CircleAvatar(
         radius: Sizes.size28,
         foregroundImage: NetworkImage(

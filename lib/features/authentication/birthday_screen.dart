@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
+import 'package:go_router/go_router.dart';
 
 import 'widgets/form_button.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
-
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const BirthdayScreen());
   @override
   State<BirthdayScreen> createState() => _BirthdayScreenState();
 }
@@ -41,12 +43,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _onNextTap() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const InterestsScreen(),
-      ),
-      (route) => false,
-    );
+    context.goNamed(InterestsScreen.routeName);
   }
 
   @override

@@ -8,7 +8,8 @@ import 'widgets/form_button.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
-
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const PasswordScreen());
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
 }
@@ -53,11 +54,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void _onSubmit() {
     if (!_isPasswordValid()) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const BirthdayScreen(),
-      ),
-    );
+    Navigator.push(context, BirthdayScreen.route());
   }
 
   @override
