@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_ticktoc/common/widgets/navigation/main_navigation_screen.dart';
 import 'package:flutter_ticktoc/features/authentication/login_screen.dart';
 import 'package:flutter_ticktoc/features/inbox/activity_screen.dart';
@@ -60,7 +61,18 @@ final router = GoRouter(
     GoRoute(
       path: VideoRecodingScreen.routePath,
       name: VideoRecodingScreen.routeName,
-      builder: (context, state) => const VideoRecodingScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const VideoRecodingScreen(),
+        transitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final position = Tween(begin: const Offset(0, 1), end: Offset.zero)
+              .animate(animation);
+          return SlideTransition(
+            position: position,
+            child: child,
+          );
+        },
+      ),
     )
   ],
 );

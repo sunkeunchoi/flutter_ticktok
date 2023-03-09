@@ -93,7 +93,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    if (!_noCamera) _cameraController.dispose();
     _progressAnimationController.dispose();
     _buttonAnimationController.dispose();
     super.dispose();
@@ -123,6 +123,7 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (_noCamera) return;
     if (!_hasPermission) return;
     if (!_isCameraInitialized) return;
     switch (state) {
@@ -234,9 +235,16 @@ class _VideoRecodingScreenState extends State<VideoRecodingScreen>
                     ],
                   ),
                 ),
+                const Positioned(
+                  top: 48,
+                  left: 24,
+                  child: CloseButton(
+                    color: Colors.black,
+                  ),
+                ),
                 if (!_noCamera)
                   Positioned(
-                    top: 24,
+                    top: 48,
                     right: 24,
                     child: Column(
                       children: [

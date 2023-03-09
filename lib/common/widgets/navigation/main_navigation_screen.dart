@@ -44,9 +44,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     });
   }
 
-  void _onPostVideoButtonTap() {
-    Navigator.of(context).push(VideoRecodingScreen.route());
-  }
+  void _onPostVideoButtonTap() =>
+      context.pushNamed(VideoRecodingScreen.routeName);
 
   @override
   Widget build(BuildContext context) {
