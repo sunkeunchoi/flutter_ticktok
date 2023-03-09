@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/assets/video.dart';
+import 'package:flutter_ticktoc/common/widgets/video_configuration/video_configuration.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -35,6 +37,7 @@ class _VideoPostState extends State<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset(ExampleVideo.example1);
   bool _isPaused = false;
+
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
 
@@ -145,7 +148,15 @@ class _VideoPostState extends State<VideoPost>
           children: [
             Positioned.fill(
               child: _videoPlayerController.value.isInitialized
-                  ? VideoPlayer(_videoPlayerController)
+                  // https://stackoverflow.com/questions/57077639/how-to-boxfit-cover-a-fullscreen-videoplayer-widget-with-specific-aspect-ratio
+                  ? FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: _videoPlayerController.value.aspectRatio,
+                        height: 1,
+                        child: VideoPlayer(_videoPlayerController),
+                      ),
+                    )
                   : Container(color: Colors.black),
             ),
             Positioned.fill(
@@ -174,6 +185,19 @@ class _VideoPostState extends State<VideoPost>
                       ),
                     ),
                   ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 48,
+              left: 24,
+              child: IconButton(
+                onPressed: context.read<VideoConfiguration>().toggleIsMuted,
+                icon: Icon(
+                  context.watch<VideoConfiguration>().isMuted
+                      ? Icons.volume_off
+                      : Icons.volume_up_rounded,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -29,7 +29,8 @@ const interests = [
 
 class InterestsScreen extends StatefulWidget {
   const InterestsScreen({super.key});
-
+  static const String routeName = "interests";
+  static const String routeURL = "/tutorial";
   @override
   State<InterestsScreen> createState() => _InterestsScreenState();
 }
@@ -58,11 +59,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   }
 
   void _onNextTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const TutorialScreen(),
-      ),
-    );
+    Navigator.push(context, TutorialScreen.route());
   }
 
   @override

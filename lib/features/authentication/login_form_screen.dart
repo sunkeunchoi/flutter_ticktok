@@ -3,10 +3,12 @@ import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/authentication/widgets/form_button.dart';
 import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginFormScreen extends StatefulWidget {
   const LoginFormScreen({super.key});
-
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const LoginFormScreen());
   @override
   State<LoginFormScreen> createState() => _LoginFormScreenState();
 }
@@ -39,12 +41,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
       return;
     }
     _formKey.currentState!.save();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const InterestsScreen(),
-      ),
-      (route) => false,
-    );
+    context.goNamed(InterestsScreen.routeName);
   }
 
   @override

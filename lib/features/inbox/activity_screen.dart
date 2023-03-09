@@ -4,6 +4,10 @@ import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ActivityScreen extends StatefulWidget {
+  static const String routeName = "activity";
+  static const String routeURL = "/activity";
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const ActivityScreen());
   const ActivityScreen({super.key});
 
   @override

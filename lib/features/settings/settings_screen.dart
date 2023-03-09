@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ticktoc/common/IconImageProvider.dart';
+import 'package:flutter_ticktoc/common/widgets/video_configuration/video_configuration.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -18,6 +21,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  List<bool> isSelected = [true, false];
+  bool forImage = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +33,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
+          SwitchListTile.adaptive(
+            title: const Text("Auto Mute"),
+            subtitle: const Text("Mute audio for videos"),
+            value: context.watch<VideoConfiguration>().isMuted,
+            onChanged: (value) =>
+                context.read<VideoConfiguration>().toggleIsMuted(),
+          ),
+          CheckboxListTile(value: false, onChanged: (value) {}),
+          RadioListTile(
+            value: false,
+            groupValue: null,
+            onChanged: (value) {},
+          ),
+          Switch(
+            value: forImage,
+            onChanged: (value) => setState(() {
+              forImage = value;
+            }),
+            activeThumbImage: IconImageProvider(
+              Icons.volume_off,
+            ),
+            activeColor: Colors.red,
+            inactiveThumbImage: IconImageProvider(Icons.volume_up),
+            inactiveThumbColor: Colors.blue,
+          ),
+          ToggleButtons(
+            isSelected: isSelected,
+            children: const [Icon(Icons.dark_mode), Icon(Icons.light_mode)],
+            onPressed: (newIndex) => setState(() {
+              isSelected = List<bool>.generate(
+                  isSelected.length, (index) => index == newIndex,
+                  growable: false);
+            }),
+          ),
           ListTile(
             title: const Text("iOS bottom sheet"),
             textColor: Colors.red,
@@ -36,7 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context: context,
                 builder: (context) => CupertinoActionSheet(
                   title: const Text("Are you sure?"),
-                  message: const Text("Please dont't go"),
+                  message: const Text("Please don't go"),
                   actions: [
                     CupertinoActionSheetAction(
                       isDefaultAction: true,
