@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ticktoc/features/videos/view_models/timeline_view_model.dart';
 import 'package:flutter_ticktoc/features/videos/views/widgets/default_loading.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPreviewScreen extends StatefulWidget {
+class VideoPreviewScreen extends ConsumerStatefulWidget {
   static String routeName = "/video_preview";
   static String routePath = "/video_preview";
   static Route route({
@@ -26,10 +28,10 @@ class VideoPreviewScreen extends StatefulWidget {
   final XFile video;
   final bool isFromGallery;
   @override
-  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
+  VideoPreviewScreenState createState() => VideoPreviewScreenState();
 }
 
-class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
+class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late final VideoPlayerController _videoPlayerController;
   Future<void> initVideo() async {
     _videoPlayerController =
@@ -61,6 +63,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     });
   }
 
+  void _onUploadPressed() {
+    ref.read(timelineProvider.notifier).uploadVideo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +82,14 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                 _savedVideo ? Icons.check_circle_rounded : Icons.save_rounded,
               ),
             ),
+          IconButton(
+            onPressed: ref.watch(timelineProvider).isLoading
+                ? () {}
+                : _onUploadPressed,
+            icon: ref.watch(timelineProvider).isLoading
+                ? const CircularProgressIndicator.adaptive()
+                : const Icon(Icons.cloud_upload_rounded),
+          )
         ],
       ),
       body: !_videoPlayerController.value.isInitialized
