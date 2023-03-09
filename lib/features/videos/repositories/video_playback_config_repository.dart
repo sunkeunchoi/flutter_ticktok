@@ -10,6 +10,6 @@ class VideoPlaybackConfigRepository {
 
   Future<void> setAutoPlay(bool value) async =>
       _preferences.setBool(_autoPlay, value);
-  Future<bool> getMuted() async => _preferences.getBool(_muted) ?? false;
-  Future<bool> getAutoPlay() async => _preferences.getBool(_autoPlay) ?? false;
+  bool get getMuted => _preferences.getBool(_muted) ?? false;
+  bool get getAutoPlay => _preferences.getBool(_autoPlay) ?? false;
 }

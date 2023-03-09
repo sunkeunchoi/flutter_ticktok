@@ -6,7 +6,7 @@ import 'package:flutter_ticktoc/assets/video.dart';
 import 'package:flutter_ticktoc/common/widgets/video_configuration/video_configuration.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/videos/widgets/video_comments.dart';
+import 'package:flutter_ticktoc/features/videos/views/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -192,11 +192,9 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: context.read<VideoConfiguration>().toggleIsMuted,
-                icon: Icon(
-                  context.watch<VideoConfiguration>().isMuted
-                      ? Icons.volume_off
-                      : Icons.volume_up_rounded,
+                onPressed: () {},
+                icon: const Icon(
+                  false ? Icons.volume_off : Icons.volume_up_rounded,
                   color: Colors.white,
                 ),
               ),
