@@ -32,6 +32,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
+          AnimatedBuilder(
+            animation: videoConfig,
+            builder: (context, child) => SwitchListTile.adaptive(
+              title: const Text("Auto mute enabled"),
+              subtitle: const Text("Videos will be muted by default"),
+              value: videoConfig.autoMute,
+              onChanged: (value) => videoConfig.toggleAutoMute(),
+            ),
+          ),
           CheckboxListTile(value: false, onChanged: (value) {}),
           RadioListTile(
             value: false,
@@ -58,13 +67,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   isSelected.length, (index) => index == newIndex,
                   growable: false);
             }),
-          ),
-          SwitchListTile.adaptive(
-            title: const Text("Auto mute enabled"),
-            subtitle: const Text("Videos will be muted by default"),
-            value: VideoConfigurationData.of(context).autoMute,
-            onChanged: (value) =>
-                VideoConfigurationData.of(context).toggleMuted(),
           ),
           ListTile(
             title: const Text("iOS bottom sheet"),

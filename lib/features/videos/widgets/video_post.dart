@@ -36,6 +36,7 @@ class _VideoPostState extends State<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset(ExampleVideo.example1);
   bool _isPaused = false;
+  bool _autoMute = videoConfig.autoMute;
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
 
@@ -70,6 +71,11 @@ class _VideoPostState extends State<VideoPost>
       value: 2.5,
       duration: _animationDuration,
     );
+    videoConfig.addListener(() {
+      setState(() {
+        _autoMute = videoConfig.autoMute;
+      });
+    });
   }
 
   @override
@@ -190,11 +196,9 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: VideoConfigurationData.of(context).toggleMuted,
+                onPressed: () => videoConfig.toggleAutoMute(),
                 icon: Icon(
-                  VideoConfigurationData.of(context).autoMute
-                      ? Icons.volume_off
-                      : Icons.volume_up_rounded,
+                  _autoMute ? Icons.volume_off : Icons.volume_up_rounded,
                   color: Colors.white,
                 ),
               ),
