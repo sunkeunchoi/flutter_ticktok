@@ -5,10 +5,11 @@ import 'package:flutter_ticktoc/features/inbox/activity_screen.dart';
 import 'package:flutter_ticktoc/features/inbox/chat_detail_screen.dart';
 import 'package:flutter_ticktoc/features/inbox/chats_screen.dart';
 import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
-import 'package:flutter_ticktoc/features/videos/video_recoding_screen.dart';
+
 import 'package:go_router/go_router.dart';
 
 import 'features/authentication/signup_screen.dart';
+import 'features/videos/views/video_recoding_screen.dart';
 
 final router = GoRouter(
   initialLocation: "/inbox",
