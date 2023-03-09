@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/assets/video.dart';
+import 'package:flutter_ticktoc/common/widgets/video_configuration/video_configuration.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/widgets/video_comments.dart';
@@ -145,7 +146,15 @@ class _VideoPostState extends State<VideoPost>
           children: [
             Positioned.fill(
               child: _videoPlayerController.value.isInitialized
-                  ? VideoPlayer(_videoPlayerController)
+                  // https://stackoverflow.com/questions/57077639/how-to-boxfit-cover-a-fullscreen-videoplayer-widget-with-specific-aspect-ratio
+                  ? FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: _videoPlayerController.value.aspectRatio,
+                        height: 1,
+                        child: VideoPlayer(_videoPlayerController),
+                      ),
+                    )
                   : Container(color: Colors.black),
             ),
             Positioned.fill(
@@ -174,6 +183,19 @@ class _VideoPostState extends State<VideoPost>
                       ),
                     ),
                   ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 48,
+              left: 24,
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  VideoConfiguration.of(context).autoMute
+                      ? Icons.volume_off
+                      : Icons.volume_up_rounded,
+                  color: Colors.white,
                 ),
               ),
             ),
