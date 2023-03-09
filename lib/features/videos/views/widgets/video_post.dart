@@ -37,6 +37,7 @@ class _VideoPostState extends State<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset(ExampleVideo.example1);
   bool _isPaused = false;
+  bool _isMuted = false;
 
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
@@ -72,9 +73,7 @@ class _VideoPostState extends State<VideoPost>
       value: 2.5,
       duration: _animationDuration,
     );
-    context
-        .read<PlaybackConfigViewModel>()
-        .addListener(_onPlaybackConfigChanged);
+    _initMuted();
   }
 
   @override
@@ -84,14 +83,22 @@ class _VideoPostState extends State<VideoPost>
     super.dispose();
   }
 
-  void _onPlaybackConfigChanged() {
-    if (!mounted) return;
+  void _initMuted() {
     final isMuted = context.read<PlaybackConfigViewModel>().isMuted;
-    if (isMuted) {
-      _videoPlayerController.setVolume(0);
-    } else {
-      _videoPlayerController.setVolume(1);
-    }
+    _setMuted(isMuted);
+    setState(() {
+      _isMuted = isMuted;
+    });
+  }
+
+  void _setMuted(bool isMuted) => isMuted
+      ? _videoPlayerController.setVolume(0)
+      : _videoPlayerController.setVolume(1);
+  void _toggleMuted() {
+    _setMuted(!_isMuted);
+    setState(() {
+      _isMuted = !_isMuted;
+    });
   }
 
   void _onVisibilityChanged(VisibilityInfo info) {
@@ -206,11 +213,9 @@ class _VideoPostState extends State<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: context.read<PlaybackConfigViewModel>().toggleMuted,
+                onPressed: _toggleMuted,
                 icon: Icon(
-                  context.watch<PlaybackConfigViewModel>().isMuted
-                      ? Icons.volume_off
-                      : Icons.volume_up_rounded,
+                  _isMuted ? Icons.volume_off : Icons.volume_up_rounded,
                   color: Colors.white,
                 ),
               ),
