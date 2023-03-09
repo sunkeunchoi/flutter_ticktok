@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/features/videos/repositories/video_playback_config_repository.dart';
-import 'package:flutter_ticktoc/features/videos/views/models/playback_config_model.dart';
+import 'package:flutter_ticktoc/features/videos/models/playback_config_model.dart';
 
 class PlaybackConfigViewModel extends Notifier<PlaybackConfigModel> {
   final VideoPlaybackConfigRepository _repository;

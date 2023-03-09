@@ -73,6 +73,7 @@ class VideoPostState extends ConsumerState<VideoPost>
       value: 2.5,
       duration: _animationDuration,
     );
+    _initMuted();
   }
 
   @override
@@ -82,11 +83,19 @@ class VideoPostState extends ConsumerState<VideoPost>
     super.dispose();
   }
 
-  void _onPlaybackConfigChanged() {
-    if (!mounted) return;
+  void _toggleMuted() {
     final muted = ref.read(playbackConfigProvider).muted;
     ref.read(playbackConfigProvider.notifier).setMuted(!muted);
     if (!muted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+  }
+
+  void _initMuted() {
+    final muted = ref.read(playbackConfigProvider).muted;
+    if (muted) {
       _videoPlayerController.setVolume(0);
     } else {
       _videoPlayerController.setVolume(1);
@@ -206,7 +215,7 @@ class VideoPostState extends ConsumerState<VideoPost>
               top: 48,
               left: 24,
               child: IconButton(
-                onPressed: _onPlaybackConfigChanged,
+                onPressed: _toggleMuted,
                 icon: Icon(
                   ref.watch(playbackConfigProvider).muted
                       ? Icons.volume_off
