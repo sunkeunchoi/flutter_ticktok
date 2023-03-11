@@ -21,10 +21,18 @@ class AuthenticationRepository {
     await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
   }
+
+  Future<void> githubSignIn() async {
+    await _firebaseAuth.signInWithProvider(
+      GithubAuthProvider(),
+    );
+  }
 }
 
 final authRepository = Provider((ref) => AuthenticationRepository());
-final authState = StreamProvider((ref) {
-  final repo = ref.read(authRepository);
-  return repo.authStateChanges();
-});
+final authState = StreamProvider(
+  (ref) {
+    final repo = ref.read(authRepository);
+    return repo.authStateChanges();
+  },
+);
