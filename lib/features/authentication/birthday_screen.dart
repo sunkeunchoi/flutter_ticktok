@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
-import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
-import 'package:go_router/go_router.dart';
 
+import 'view_models/sign_up_view_model.dart';
 import 'widgets/form_button.dart';
 
-class BirthdayScreen extends StatefulWidget {
+class BirthdayScreen extends ConsumerStatefulWidget {
   const BirthdayScreen({super.key});
   static Route route() =>
       MaterialPageRoute(builder: (context) => const BirthdayScreen());
   @override
-  State<BirthdayScreen> createState() => _BirthdayScreenState();
+  BirthdayScreenState createState() => BirthdayScreenState();
 }
 
-class _BirthdayScreenState extends State<BirthdayScreen> {
+class BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   final TextEditingController _birthdayController = TextEditingController();
   DateTime _date = DateTime.now().subtract(const Duration(days: 365 * 40));
 
@@ -43,7 +43,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _onNextTap() {
-    context.goNamed(InterestsScreen.routeName);
+    ref.read(signUpProvider.notifier).signUp(context);
   }
 
   @override
@@ -53,6 +53,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         title: const Text("Sign up"),
       ),
       bottomNavigationBar: BottomAppBar(
+        color: Colors.transparent,
         height: 300,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.date,
@@ -103,7 +104,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             ),
             Gaps.v16,
             FormButton(
-              disabled: false,
+              disabled: ref.watch(signUpProvider).isLoading,
               text: "Next",
               onTap: _onNextTap,
             ),

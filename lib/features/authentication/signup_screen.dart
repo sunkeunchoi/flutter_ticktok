@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/authentication/username_screen.dart';
@@ -7,7 +8,9 @@ import 'package:flutter_ticktoc/features/authentication/widgets/auth_button.dart
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-class SignUpScreen extends StatelessWidget {
+import 'view_models/social_auth_view_model.dart';
+
+class SignUpScreen extends ConsumerWidget {
   static const String routeName = "signUp";
   static const String routeURL = "/";
   static Route route() => MaterialPageRoute(
@@ -25,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
       Navigator.push(context, UsernameScreen.route());
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return OrientationBuilder(
       builder: (context, orientation) => Scaffold(
         body: SafeArea(
@@ -61,11 +64,13 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   Gaps.v16,
                   AuthButton(
-                    text: "Continue with Apple",
+                    text: "Continue with Github",
                     icon: const FaIcon(
-                      FontAwesomeIcons.apple,
+                      FontAwesomeIcons.github,
                     ),
-                    onTapCallback: () {},
+                    onTapCallback: () => ref
+                        .read(socialAuthProvider.notifier)
+                        .githubSignIn(context),
                   ),
                 ],
                 if (orientation == Orientation.landscape)

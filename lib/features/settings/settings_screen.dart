@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ticktoc/features/authentication/view_models/sign_up_view_model.dart';
 import 'package:flutter_ticktoc/features/videos/view_models/playback_config_vm.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -93,7 +95,7 @@ class SettingsScreen extends ConsumerWidget {
                 context: context,
                 builder: (context) => CupertinoAlertDialog(
                   title: const Text("Are you sure?"),
-                  content: const Text("Please dont't go"),
+                  content: const Text("Please don't go"),
                   actions: [
                     CupertinoDialogAction(
                       onPressed: () => Navigator.of(context).pop(),
@@ -102,7 +104,10 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ),
                     CupertinoDialogAction(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        ref.read(signUpProvider.notifier).signOut();
+                        context.go("/");
+                      },
                       isDestructiveAction: true,
                       child: const Text(
                         "Yes",
@@ -124,7 +129,7 @@ class SettingsScreen extends ConsumerWidget {
                     FontAwesomeIcons.skull,
                   ),
                   title: const Text("Are you sure?"),
-                  content: const Text("Please dont't go"),
+                  content: const Text("Please don't go"),
                   actions: [
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
