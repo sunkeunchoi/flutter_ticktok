@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
+import 'package:flutter_ticktoc/features/authentication/view_models/sign_in_view_model.dart';
 import 'package:flutter_ticktoc/features/authentication/widgets/form_button.dart';
-import 'package:flutter_ticktoc/features/onboarding/interests_screen.dart';
-import 'package:go_router/go_router.dart';
 
-class LoginFormScreen extends StatefulWidget {
+class LoginFormScreen extends ConsumerStatefulWidget {
   const LoginFormScreen({super.key});
   static Route route() =>
       MaterialPageRoute(builder: (context) => const LoginFormScreen());
   @override
-  State<LoginFormScreen> createState() => _LoginFormScreenState();
+  LoginFormScreenState createState() => LoginFormScreenState();
 }
 
-class _LoginFormScreenState extends State<LoginFormScreen> {
+class LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
   String? _emailValidator(String? value) {
@@ -41,7 +41,13 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
       return;
     }
     _formKey.currentState!.save();
-    context.goNamed(InterestsScreen.routeName);
+    //  signIn
+    ref.read(signInProvider.notifier).signIn(
+          email: _formData["email"].toString(),
+          password: _formData["password"].toString(),
+          context: context,
+        );
+    // context.goNamed(InterestsScreen.routeName);
   }
 
   @override
@@ -77,7 +83,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                 ),
                 Gaps.v28,
                 FormButton(
-                  disabled: false,
+                  disabled: ref.watch(signInProvider).isLoading,
                   text: "Login",
                   onTap: _onSubmitTap,
                 ),

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -20,9 +22,30 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>REVERSED_CLIENT_ID</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.980369802937-7nk6u9t7bj0ug664acti059dnkccvosm</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Upload Video for TiktokClone</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Upload Video for TiktokClone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Save Video for TiktokClone</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -43,19 +66,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<!-- For ImagePicker https://pub.dev/packages/image_picker -->
-	<!-- For Camera https://pub.dev/packages/camera -->
-	<key>NSCameraUsageDescription</key>
-	<string>Upload Video for TiktokClone</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Upload Video for TiktokClone</string>
-	<!-- For ImagePicker https://pub.dev/packages/image_picker -->
-	<!-- For Gallery https://pub.dev/packages/gallery_saver -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Save Video for TiktokClone</string>
 </dict>
 </plist>
