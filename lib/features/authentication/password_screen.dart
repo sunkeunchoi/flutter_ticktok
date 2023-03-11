@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/authentication/birthday_screen.dart';
-import 'package:flutter_ticktoc/features/authentication/view_models/signup_view_model.dart';
+import 'package:flutter_ticktoc/features/authentication/view_models/sign_up_view_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'widgets/form_button.dart';

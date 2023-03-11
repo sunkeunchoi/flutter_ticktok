@@ -14,11 +14,12 @@ import 'features/authentication/signup_screen.dart';
 import 'features/videos/views/video_recoding_screen.dart';
 
 final routerProvider = Provider((ref) {
-  ref.watch(authState);
+  final user = ref.watch(authState);
+  final isLoggedIn = user.hasValue;
   return GoRouter(
     initialLocation: "/home",
     redirect: (context, state) {
-      final isLoggedIn = ref.read(authRepository).isLoggedIn;
+      // final isLoggedIn = ref.read(authRepository).isLoggedIn;
       if (!isLoggedIn) {
         if (state.subloc != SignUpScreen.routeURL &&
             state.subloc != LoginScreen.routeURL) {
