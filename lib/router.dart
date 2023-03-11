@@ -14,6 +14,7 @@ import 'features/authentication/signup_screen.dart';
 import 'features/videos/views/video_recoding_screen.dart';
 
 final routerProvider = Provider((ref) {
+  ref.watch(authState);
   return GoRouter(
     initialLocation: "/home",
     redirect: (context, state) {
