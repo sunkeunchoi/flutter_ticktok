@@ -26,12 +26,17 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
     return UserProfileModel.empty();
   }
 
-  Future<void> createProfile(User user) async {
+  Future<void> createProfile({
+    required User user,
+    String? birthday,
+    String? name,
+  }) async {
     state = const AsyncValue.loading();
     final profile = UserProfileModel(
       uid: user.uid,
-      name: user.displayName,
+      name: name,
       email: user.email,
+      birthday: birthday,
     );
     await _repository.createProfile(profile);
     state = AsyncValue.data(profile);

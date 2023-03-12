@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 class UserProfileModel {
   final String uid;
@@ -7,6 +6,7 @@ class UserProfileModel {
   final String? name;
   final String? bio;
   final String? link;
+  final String? birthday;
   final bool hasAvatar;
 
   UserProfileModel({
@@ -15,6 +15,7 @@ class UserProfileModel {
     this.name,
     this.bio,
     this.link,
+    this.birthday,
     this.hasAvatar = false,
   });
   factory UserProfileModel.empty() {
@@ -30,6 +31,7 @@ class UserProfileModel {
       'name': name,
       'bio': bio,
       'link': link,
+      'birthday': birthday,
       'hasAvatar': hasAvatar,
     };
   }
@@ -41,40 +43,9 @@ class UserProfileModel {
       name: map['name'] != null ? map['name'] as String : null,
       bio: map['bio'] != null ? map['bio'] as String : null,
       link: map['link'] != null ? map['link'] as String : null,
+      birthday: map['birthday'] != null ? map['birthday'] as String : null,
       hasAvatar: map['hasAvatar'] as bool,
     );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserProfileModel.fromJson(String source) =>
-      UserProfileModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'UserProfileModel(uid: $uid, email: $email, name: $name, bio: $bio, link: $link, hasAvatar: $hasAvatar)';
-  }
-
-  @override
-  bool operator ==(covariant UserProfileModel other) {
-    if (identical(this, other)) return true;
-
-    return other.uid == uid &&
-        other.email == email &&
-        other.name == name &&
-        other.bio == bio &&
-        other.link == link &&
-        other.hasAvatar == hasAvatar;
-  }
-
-  @override
-  int get hashCode {
-    return uid.hashCode ^
-        email.hashCode ^
-        name.hashCode ^
-        bio.hashCode ^
-        link.hashCode ^
-        hasAvatar.hashCode;
   }
 
   UserProfileModel copyWith({
@@ -83,6 +54,7 @@ class UserProfileModel {
     String? name,
     String? bio,
     String? link,
+    String? birthday,
     bool? hasAvatar,
   }) {
     return UserProfileModel(
@@ -91,6 +63,7 @@ class UserProfileModel {
       name: name ?? this.name,
       bio: bio ?? this.bio,
       link: link ?? this.link,
+      birthday: birthday ?? this.birthday,
       hasAvatar: hasAvatar ?? this.hasAvatar,
     );
   }
