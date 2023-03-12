@@ -14,7 +14,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
   FutureOr<UserProfileModel> build() async {
     _repository = ref.read(userRepository);
     _authRepository = ref.read(authRepository);
-    await Future.delayed(const Duration(seconds: 5));
+    // await Future.delayed(const Duration(seconds: 5));
     if (_authRepository.isLoggedIn) {
       final profile = await _repository.findProfile(
         _authRepository.user!.uid,
@@ -35,6 +35,12 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
     );
     await _repository.createProfile(profile);
     state = AsyncValue.data(profile);
+  }
+
+  Future<void> onAvatarUpload() async {
+    if (state.value == null) return;
+    state = AsyncValue.data(state.value!.copyWith(hasAvatar: true));
+    await _repository.updateUser(state.value!.uid, {"hasAvatar": true});
   }
 }
 

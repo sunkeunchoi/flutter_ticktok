@@ -7,6 +7,7 @@ class UserProfileModel {
   final String? name;
   final String? bio;
   final String? link;
+  final bool hasAvatar;
 
   UserProfileModel({
     required this.uid,
@@ -14,26 +15,11 @@ class UserProfileModel {
     this.name,
     this.bio,
     this.link,
+    this.hasAvatar = false,
   });
   factory UserProfileModel.empty() {
     return UserProfileModel(
       uid: "",
-    );
-  }
-
-  UserProfileModel copyWith({
-    String? uid,
-    String? email,
-    String? name,
-    String? bio,
-    String? link,
-  }) {
-    return UserProfileModel(
-      uid: uid ?? this.uid,
-      email: email ?? this.email,
-      name: name ?? this.name,
-      bio: bio ?? this.bio,
-      link: link ?? this.link,
     );
   }
 
@@ -44,6 +30,7 @@ class UserProfileModel {
       'name': name,
       'bio': bio,
       'link': link,
+      'hasAvatar': hasAvatar,
     };
   }
 
@@ -54,6 +41,7 @@ class UserProfileModel {
       name: map['name'] != null ? map['name'] as String : null,
       bio: map['bio'] != null ? map['bio'] as String : null,
       link: map['link'] != null ? map['link'] as String : null,
+      hasAvatar: map['hasAvatar'] as bool,
     );
   }
 
@@ -64,7 +52,7 @@ class UserProfileModel {
 
   @override
   String toString() {
-    return 'UserProfileModel(uid: $uid, email: $email, name: $name, bio: $bio, link: $link)';
+    return 'UserProfileModel(uid: $uid, email: $email, name: $name, bio: $bio, link: $link, hasAvatar: $hasAvatar)';
   }
 
   @override
@@ -75,7 +63,8 @@ class UserProfileModel {
         other.email == email &&
         other.name == name &&
         other.bio == bio &&
-        other.link == link;
+        other.link == link &&
+        other.hasAvatar == hasAvatar;
   }
 
   @override
@@ -84,6 +73,25 @@ class UserProfileModel {
         email.hashCode ^
         name.hashCode ^
         bio.hashCode ^
-        link.hashCode;
+        link.hashCode ^
+        hasAvatar.hashCode;
+  }
+
+  UserProfileModel copyWith({
+    String? uid,
+    String? email,
+    String? name,
+    String? bio,
+    String? link,
+    bool? hasAvatar,
+  }) {
+    return UserProfileModel(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      bio: bio ?? this.bio,
+      link: link ?? this.link,
+      hasAvatar: hasAvatar ?? this.hasAvatar,
+    );
   }
 }

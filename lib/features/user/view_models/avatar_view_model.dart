@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/features/authentication/repositories/authentication_repository.dart';
 import 'package:flutter_ticktoc/features/user/repositories/user_repository.dart';
+import 'package:flutter_ticktoc/features/user/view_models/users_view_model.dart';
 
 class AvatarViewModel extends AsyncNotifier<void> {
   late final UserRepository _repository;
@@ -16,7 +17,10 @@ class AvatarViewModel extends AsyncNotifier<void> {
     state = const AsyncValue.loading();
     final fileName = ref.read(authRepository).user!.uid;
     state = await AsyncValue.guard(
-      () => _repository.uploadAvatar(file, fileName),
+      () async {
+        await _repository.uploadAvatar(file, fileName);
+        await ref.read(usersProvider.notifier).onAvatarUpload();
+      },
     );
   }
 }
