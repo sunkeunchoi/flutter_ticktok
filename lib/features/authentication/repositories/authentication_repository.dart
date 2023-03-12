@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AuthenticationRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   User? get user => _firebaseAuth.currentUser;
-  bool get isLoggedIn => user != null;
+  bool get isLoggedIn => user != null && user?.uid != null;
+  String? get uid => user?.uid;
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
   Future<UserCredential> emailSignUp(String email, String password) async {
     return _firebaseAuth.createUserWithEmailAndPassword(
