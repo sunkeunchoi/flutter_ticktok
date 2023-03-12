@@ -7,6 +7,7 @@ import 'package:flutter_ticktoc/features/settings/settings_screen.dart';
 import 'package:flutter_ticktoc/features/user/view_models/users_view_model.dart';
 import 'package:flutter_ticktoc/features/user/widgets/avatar.dart';
 import 'package:flutter_ticktoc/features/user/widgets/persistent_tab_bar.dart';
+import 'package:flutter_ticktoc/features/user/widgets/update_profile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
@@ -25,6 +26,14 @@ class UserProfileScreenState extends ConsumerState<UserProfileScreen> {
     );
   }
 
+  void _onEditPressed({required String bio, required String link}) =>
+      Navigator.of(context).push(
+        UpdateProfile.route(
+          bio: bio,
+          link: link,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return ref.watch(usersProvider).when(
@@ -38,13 +47,24 @@ class UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 child: NestedScrollView(
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                           SliverAppBar(
-                            title: Text(data.name.toString()),
+                            centerTitle: true,
+                            title: Text(
+                              data.name.toString(),
+                            ),
                             actions: [
                               IconButton(
+                                onPressed: () => _onEditPressed(
+                                  bio: data.bio ?? "",
+                                  link: data.link ?? "https://",
+                                ),
+                                icon: const Icon(
+                                  Icons.edit_note,
+                                ),
+                              ),
+                              IconButton(
                                 onPressed: _onGearPressed,
-                                icon: const FaIcon(
-                                  FontAwesomeIcons.gear,
-                                  size: Sizes.size20,
+                                icon: const Icon(
+                                  Icons.settings,
                                 ),
                               ),
                             ],
@@ -124,27 +144,27 @@ class UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                                   ),
                                 ),
                                 Gaps.v14,
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: Sizes.size32,
                                   ),
                                   child: Text(
-                                    "All highlights and where to watch live matches on FIFA + I wonder how it loook,",
+                                    data.bio ?? "Please update bio",
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
                                 Gaps.v14,
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    FaIcon(
+                                  children: [
+                                    const FaIcon(
                                       FontAwesomeIcons.link,
                                       size: Sizes.size14,
                                     ),
                                     Gaps.h04,
                                     Text(
-                                      "https://nomadcoders.co",
-                                      style: TextStyle(
+                                      data.link ?? "Please update link",
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
