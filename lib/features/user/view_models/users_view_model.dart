@@ -14,6 +14,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
   FutureOr<UserProfileModel> build() async {
     _repository = ref.read(userRepository);
     _authRepository = ref.read(authRepository);
+    await Future.delayed(const Duration(seconds: 5));
     if (_authRepository.isLoggedIn) {
       final profile = await _repository.findProfile(
         _authRepository.user!.uid,
