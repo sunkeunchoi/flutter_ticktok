@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,11 @@ class SignUpViewModel extends AsyncNotifier<void> {
         form['email'],
         form['password'],
       );
-      users.createAccount(userCredential.user!);
+      users.createProfile(userCredential.user!);
     });
 
     if (state.hasError) {
+      log("${state.error}");
       showFirebaseErrorSnack(context, state.error as FirebaseException);
     } else {
       context.goNamed(InterestsScreen.routeName);
