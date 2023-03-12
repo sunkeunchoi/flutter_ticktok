@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/common/widgets/navigation/main_navigation_screen.dart';
@@ -15,7 +17,9 @@ import 'features/videos/views/video_recoding_screen.dart';
 
 final routerProvider = Provider((ref) {
   final user = ref.watch(authState);
-  final isLoggedIn = user.hasValue;
+  final uid = user.value?.uid;
+  final isLoggedIn = uid != null && uid.isNotEmpty;
+  log(uid.toString());
   return GoRouter(
     initialLocation: "/home",
     redirect: (context, state) {
