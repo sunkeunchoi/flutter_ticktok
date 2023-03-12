@@ -20,7 +20,7 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
         _authRepository.user!.uid,
       );
       if (profile != null) {
-        UserProfileModel.fromMap(profile);
+        return UserProfileModel.fromMap(profile);
       }
     }
     return UserProfileModel.empty();
@@ -39,8 +39,9 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
 
   Future<void> onAvatarUpload() async {
     if (state.value == null) return;
+    final uid = state.value!.uid;
     state = AsyncValue.data(state.value!.copyWith(hasAvatar: true));
-    await _repository.updateUser(state.value!.uid, {"hasAvatar": true});
+    await _repository.updateUser(uid, {"hasAvatar": true});
   }
 }
 
