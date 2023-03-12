@@ -8,6 +8,7 @@ import 'package:flutter_ticktoc/utils.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../onboarding/interests_screen.dart';
+import '../../user/view_models/users_view_model.dart';
 
 class SignUpViewModel extends AsyncNotifier<void> {
   late final AuthenticationRepository _authRepo;
@@ -20,12 +21,15 @@ class SignUpViewModel extends AsyncNotifier<void> {
   Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();
     final form = ref.read(signUpForm);
-    state = await AsyncValue.guard(
-      () => _authRepo.emailSignUp(
+    state = await AsyncValue.guard(() async {
+      final users = ref.read(usersProvider.notifier);
+      final userCredential = await _authRepo.emailSignUp(
         form['email'],
         form['password'],
-      ),
-    );
+      );
+      users.createAccount(userCredential.user!);
+    });
+
     if (state.hasError) {
       showFirebaseErrorSnack(context, state.error as FirebaseException);
     } else {
