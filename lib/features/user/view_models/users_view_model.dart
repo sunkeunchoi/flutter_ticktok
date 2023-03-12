@@ -2,15 +2,26 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ticktoc/features/authentication/repositories/authentication_repository.dart';
 import 'package:flutter_ticktoc/features/user/repositories/user_repository.dart';
 
 import '../models/user_profile_model.dart';
 
 class UsersViewModel extends AsyncNotifier<UserProfileModel> {
   late final UserRepository _repository;
+  late final AuthenticationRepository _authRepository;
   @override
   FutureOr<UserProfileModel> build() async {
     _repository = ref.read(userRepository);
+    _authRepository = ref.read(authRepository);
+    if (_authRepository.isLoggedIn) {
+      final profile = await _repository.findProfile(
+        _authRepository.user!.uid,
+      );
+      if (profile != null) {
+        UserProfileModel.fromMap(profile);
+      }
+    }
     return UserProfileModel.empty();
   }
 

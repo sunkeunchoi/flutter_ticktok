@@ -10,6 +10,11 @@ class UserRepository {
           profile.toMap(),
         );
   }
+
+  Future<Map<String, dynamic>?> findProfile(String uid) async {
+    final doc = await _db.collection("profiles").doc(uid).get();
+    return doc.data();
+  }
 }
 
 final userRepository = Provider(
