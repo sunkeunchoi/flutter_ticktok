@@ -15,19 +15,27 @@ const db = admin.firestore();
 const region = functions.region("asia-northeast3");
 export const onLikeCreated = region.firestore.document("likes/{likeId}").onCreate(
     async (snapshot, context) => {
-        const [videoId, _userId] = snapshot.id.split("_");
-        await db.collection("videos").doc(videoId).update({
+        const [videoId, userId] = snapshot.id.split("_");
+        const query = db.collection("videos").doc(videoId);
+        await query.update({
             likes: admin.firestore.FieldValue.increment(1),
+        });
+        const videoDoc = await query.get();
+        const videoData = videoDoc.data();
+        await db.collection("profiles").doc(userId).collection("likes").doc(videoId).set({
+            videoId: videoId,
+            ...videoData,
         });
 
     },
 );
 export const onLikeDeleted = region.firestore.document("likes/{likeId}").onDelete(
     async (snapshot, context) => {
-        const [videoId, _userId] = snapshot.id.split("_");
+        const [videoId, userId] = snapshot.id.split("_");
         await db.collection("videos").doc(videoId).update({
             likes: admin.firestore.FieldValue.increment(-1),
         });
+        await db.collection("profiles").doc(userId).collection("likes").doc(videoId).delete();
 
     },
 );
