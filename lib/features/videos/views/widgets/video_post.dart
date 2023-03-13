@@ -158,7 +158,7 @@ class VideoPostState extends ConsumerState<VideoPost>
   void _onLikeTap() {
     ref
         .read(videoPostProvider(widget.videoData.id).notifier)
-        .likeVideo(widget.videoData.id);
+        .toggleVideoLike(widget.videoData.id);
   }
 
   @override
