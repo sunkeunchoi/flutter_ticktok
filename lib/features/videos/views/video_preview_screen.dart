@@ -8,6 +8,8 @@ import 'package:flutter_ticktoc/features/videos/views/widgets/default_loading.da
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:video_player/video_player.dart';
 
+import '../view_models/upload_video_view_model.dart';
+
 class VideoPreviewScreen extends ConsumerStatefulWidget {
   static String routeName = "/video_preview";
   static String routePath = "/video_preview";
@@ -64,7 +66,10 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   }
 
   void _onUploadPressed() {
-    ref.read(timelineProvider.notifier).uploadVideo();
+    ref.read(uploadVideoProvider.notifier).uploadVideo(
+          File(widget.video.path),
+          context,
+        );
   }
 
   @override
