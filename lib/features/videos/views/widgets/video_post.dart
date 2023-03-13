@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/view_models/playback_config_vm.dart';
+import 'package:flutter_ticktoc/features/videos/view_models/video_post_view_model.dart';
 import 'package:flutter_ticktoc/features/videos/views/widgets/video_comments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -154,6 +155,12 @@ class VideoPostState extends ConsumerState<VideoPost>
     );
   }
 
+  void _onLikeTap() {
+    ref
+        .read(videoPostProvider(widget.videoData.id).notifier)
+        .likeVideo(widget.videoData.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -284,9 +291,12 @@ class VideoPostState extends ConsumerState<VideoPost>
                     ),
                   ),
                   Gaps.v20,
-                  VideoButton(
-                    icon: Icons.favorite,
-                    text: "${widget.videoData.likes}",
+                  GestureDetector(
+                    onTap: _onLikeTap,
+                    child: VideoButton(
+                      icon: Icons.favorite,
+                      text: "${widget.videoData.likes}",
+                    ),
                   ),
                   Gaps.v20,
                   GestureDetector(
