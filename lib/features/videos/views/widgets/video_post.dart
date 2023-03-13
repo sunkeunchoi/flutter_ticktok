@@ -2,7 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_ticktoc/assets/video.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
 import 'package:flutter_ticktoc/features/videos/view_models/playback_config_vm.dart';
@@ -33,8 +32,8 @@ class VideoPost extends ConsumerStatefulWidget {
 class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset(ExampleVideo.example1);
+  late final VideoPlayerController _videoPlayerController =
+      VideoPlayerController.network(widget.videoData.fileUrl);
   bool _isPaused = false;
   late final bool _hasMore = widget.videoData.description.length > 20;
   late bool _seeMore;

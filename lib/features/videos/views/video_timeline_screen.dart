@@ -16,18 +16,16 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   final PageController _pageController = PageController();
   final Duration _scrollDuration = const Duration(milliseconds: 250);
   final Curve _scrollCurve = Curves.linear;
-  int _itemCount = 4;
+  int _itemCount = 0;
 
-  void _onPageChanged(int page) {
+  void _onPageChanged(int page) async {
     _pageController.animateToPage(
       page,
       duration: _scrollDuration,
       curve: _scrollCurve,
     );
     if (page < _itemCount - 2) return;
-    setState(() {
-      _itemCount = _itemCount + 4;
-    });
+    await ref.watch(timelineProvider.notifier).fetchNextPage();
   }
 
   Future<void> _onRefresh() {
@@ -63,7 +61,7 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
             ),
           ),
           data: (List<VideoModel> videos) {
-            print(videos);
+            _itemCount = videos.length;
             return RefreshIndicator(
               onRefresh: _onRefresh,
               displacement: 50,
