@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,6 +84,7 @@ class VideoPostState extends ConsumerState<VideoPost>
   }
 
   void _toggleMuted() {
+    if (!mounted) return;
     final muted = ref.read(playbackConfigProvider).muted;
     ref.read(playbackConfigProvider.notifier).setMuted(!muted);
     if (!muted) {
@@ -147,176 +150,192 @@ class VideoPostState extends ConsumerState<VideoPost>
     _onTogglePause();
   }
 
-  Future<void> _onRefresh() {
-    return Future.delayed(
-      const Duration(
-        seconds: 5,
-      ),
-    );
-  }
-
-  void _onLikeTap() {
-    ref
-        .read(videoPostProvider(widget.videoData.id).notifier)
-        .toggleVideoLike(widget.videoData.id);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      displacement: 50,
-      edgeOffset: 20,
-      color: Theme.of(context).primaryColor,
-      child: VisibilityDetector(
-        key: Key("${widget.index}"),
-        onVisibilityChanged: _onVisibilityChanged,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: _videoPlayerController.value.isInitialized
-                  // https://stackoverflow.com/questions/57077639/how-to-boxfit-cover-a-fullscreen-videoplayer-widget-with-specific-aspect-ratio
-                  ? FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        width: _videoPlayerController.value.aspectRatio,
-                        height: 1,
-                        child: VideoPlayer(_videoPlayerController),
-                      ),
-                    )
-                  : Image.network(
-                      widget.videoData.thumbnailUrl,
-                      fit: BoxFit.cover,
+    return VisibilityDetector(
+      key: Key("${widget.index}"),
+      onVisibilityChanged: _onVisibilityChanged,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: _videoPlayerController.value.isInitialized
+                // https://stackoverflow.com/questions/57077639/how-to-boxfit-cover-a-fullscreen-videoplayer-widget-with-specific-aspect-ratio
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _videoPlayerController.value.aspectRatio,
+                      height: 1,
+                      child: VideoPlayer(_videoPlayerController),
                     ),
-            ),
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: _onTogglePause,
-              ),
-            ),
-            Positioned.fill(
-              child: IgnorePointer(
-                child: Center(
-                  child: AnimatedBuilder(
-                    animation: _animationController,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _animationController.value,
-                        child: child,
-                      );
-                    },
-                    child: AnimatedOpacity(
-                      opacity: _isPaused ? 1 : 0,
-                      duration: _animationDuration,
-                      child: const FaIcon(
-                        FontAwesomeIcons.play,
-                        color: Colors.white,
-                        size: Sizes.size64,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 48,
-              left: 24,
-              child: IconButton(
-                onPressed: _toggleMuted,
-                icon: Icon(
-                  ref.watch(playbackConfigProvider).muted
-                      ? Icons.volume_off
-                      : Icons.volume_up_rounded,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: Sizes.size32,
-              left: Sizes.size32,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "@${widget.videoData.creator}",
-                    style: const TextStyle(
-                      fontSize: Sizes.size20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Gaps.v10,
-                  Row(
-                    children: [
-                      Text(
-                        _hasMore && !_seeMore
-                            ? "${widget.videoData.description.substring(0, 15)}..."
-                            : widget.videoData.description,
-                        style: const TextStyle(
-                          fontSize: Sizes.size16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      if (_hasMore && !_seeMore) Gaps.h05,
-                      if (_hasMore && !_seeMore)
-                        GestureDetector(
-                          onTap: _onTapSeeMore,
-                          child: const Text(
-                            "See More",
-                            style: TextStyle(
-                              fontSize: Sizes.size16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: Sizes.size12,
-              right: Sizes.size12,
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    foregroundImage: NetworkImage(
-                      "https://firebasestorage.googleapis.com/v0/b/tiktok-aroxima.appspot.com/o/avatars%2F${widget.videoData.creatorUid}?alt=media",
-                    ),
-                    child: Text(
-                      "@${widget.videoData.creator}",
-                    ),
-                  ),
-                  Gaps.v20,
-                  GestureDetector(
-                    onTap: _onLikeTap,
-                    child: VideoButton(
-                      icon: Icons.favorite,
-                      text: "${widget.videoData.likes}",
-                    ),
-                  ),
-                  Gaps.v20,
-                  GestureDetector(
-                    onTap: () => _onTapComments(context),
-                    child: VideoButton(
-                      icon: Icons.comment,
-                      text: "${widget.videoData.comments}",
-                    ),
-                  ),
-                  Gaps.v20,
-                  const VideoButton(
-                    icon: Icons.share,
-                    text: "Share",
                   )
-                ],
+                : Image.network(
+                    widget.videoData.thumbnailUrl,
+                    fit: BoxFit.cover,
+                  ),
+          ),
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: _onTogglePause,
+            ),
+          ),
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Center(
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _animationController.value,
+                      child: child,
+                    );
+                  },
+                  child: AnimatedOpacity(
+                    opacity: _isPaused ? 1 : 0,
+                    duration: _animationDuration,
+                    child: const FaIcon(
+                      FontAwesomeIcons.play,
+                      color: Colors.white,
+                      size: Sizes.size64,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: 48,
+            left: 24,
+            child: IconButton(
+              onPressed: _toggleMuted,
+              icon: Icon(
+                ref.watch(playbackConfigProvider).muted
+                    ? Icons.volume_off
+                    : Icons.volume_up_rounded,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: Sizes.size32,
+            left: Sizes.size32,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "@${widget.videoData.creator}",
+                  style: const TextStyle(
+                    fontSize: Sizes.size20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Gaps.v10,
+                Row(
+                  children: [
+                    Text(
+                      _hasMore && !_seeMore
+                          ? "${widget.videoData.description.substring(0, 15)}..."
+                          : widget.videoData.description,
+                      style: const TextStyle(
+                        fontSize: Sizes.size16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (_hasMore && !_seeMore) Gaps.h05,
+                    if (_hasMore && !_seeMore)
+                      GestureDetector(
+                        onTap: _onTapSeeMore,
+                        child: const Text(
+                          "See More",
+                          style: TextStyle(
+                            fontSize: Sizes.size16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: Sizes.size12,
+            right: Sizes.size12,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  foregroundImage: NetworkImage(
+                    "https://firebasestorage.googleapis.com/v0/b/tiktok-aroxima.appspot.com/o/avatars%2F${widget.videoData.creatorUid}?alt=media",
+                  ),
+                  child: Text(
+                    "@${widget.videoData.creator}",
+                  ),
+                ),
+                Gaps.v20,
+                VideoLikes(
+                  videoId: widget.videoData.id,
+                  likes: widget.videoData.likes,
+                ),
+                Gaps.v20,
+                GestureDetector(
+                  onTap: () => _onTapComments(context),
+                  child: VideoButton(
+                    icon: Icons.comment,
+                    text: "${widget.videoData.comments}",
+                  ),
+                ),
+                Gaps.v20,
+                const VideoButton(
+                  icon: Icons.share,
+                  text: "Share",
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+class VideoLikes extends ConsumerWidget {
+  const VideoLikes({
+    super.key,
+    required this.likes,
+    required this.videoId,
+  });
+
+  final int likes;
+  final String videoId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    log(videoId);
+    return ref.watch(videoPostProvider(videoId)).when(
+          loading: () => GestureDetector(
+            onTap: null,
+            child: VideoButton(
+              icon: Icons.favorite,
+              text: "$likes",
+              iconColor: Colors.white,
+            ),
+          ),
+          error: (error, stackTrace) => const SizedBox(),
+          data: (data) {
+            return GestureDetector(
+              onTap: () => ref
+                  .read(videoPostProvider(videoId).notifier)
+                  .toggleVideoLike(),
+              child: VideoButton(
+                icon: Icons.favorite,
+                text: "$likes",
+                iconColor: data ? Colors.redAccent.shade400 : Colors.white,
+              ),
+            );
+          },
+        );
   }
 }
