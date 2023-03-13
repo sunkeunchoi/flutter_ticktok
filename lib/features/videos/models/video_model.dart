@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class VideoModel {
+  final String id;
   final String title;
   final String description;
   final String fileUrl;
@@ -11,6 +12,7 @@ class VideoModel {
   final int createdAt;
 
   VideoModel({
+    required this.id,
     required this.title,
     required this.description,
     required this.fileUrl,
@@ -23,6 +25,7 @@ class VideoModel {
   });
 
   VideoModel copyWith({
+    String? id,
     String? title,
     String? description,
     String? fileUrl,
@@ -34,6 +37,7 @@ class VideoModel {
     int? createdAt,
   }) {
     return VideoModel(
+      id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       fileUrl: fileUrl ?? this.fileUrl,
@@ -46,21 +50,9 @@ class VideoModel {
     );
   }
 
-  factory VideoModel.empty() {
-    return VideoModel(
-      title: "",
-      description: "",
-      fileUrl: "",
-      thumbnailUrl: "",
-      creatorUid: "",
-      creator: "",
-      likes: 0,
-      comments: 0,
-      createdAt: DateTime.now().microsecondsSinceEpoch,
-    );
-  }
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'title': title,
       'description': description,
       'fileUrl': fileUrl,
@@ -73,8 +65,12 @@ class VideoModel {
     };
   }
 
-  factory VideoModel.fromMap(Map<String, dynamic> map) {
+  factory VideoModel.fromMap({
+    required Map<String, dynamic> map,
+    required String videoId,
+  }) {
     return VideoModel(
+      id: videoId,
       title: map['title'] as String,
       description: map['description'] as String,
       fileUrl: map['fileUrl'] as String,
