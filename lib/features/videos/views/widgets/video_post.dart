@@ -2,7 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/assets/video.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
@@ -13,20 +12,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../models/video_model.dart';
 import 'video_button.dart';
 
 class VideoPost extends ConsumerStatefulWidget {
   final VoidCallback onVideoFinished;
   final int index;
-  final String description;
-  final bool _hasMore;
+  final VideoModel videoData;
   const VideoPost({
     Key? key,
     required this.onVideoFinished,
     required this.index,
-    required this.description,
-  })  : _hasMore = description.length > 10,
-        super(key: key);
+    required this.videoData,
+  }) : super(key: key);
 
   @override
   VideoPostState createState() => VideoPostState();
@@ -38,7 +36,7 @@ class VideoPostState extends ConsumerState<VideoPost>
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset(ExampleVideo.example1);
   bool _isPaused = false;
-
+  late final bool _hasMore = widget.videoData.description.length > 20;
   late bool _seeMore;
   final _animationDuration = const Duration(milliseconds: 200);
 
@@ -64,7 +62,7 @@ class VideoPostState extends ConsumerState<VideoPost>
   @override
   void initState() {
     super.initState();
-    _seeMore = !widget._hasMore;
+    _seeMore = _hasMore;
     _initVideoPlayer();
     _animationController = AnimationController(
       vsync: this,
@@ -180,7 +178,10 @@ class VideoPostState extends ConsumerState<VideoPost>
                         child: VideoPlayer(_videoPlayerController),
                       ),
                     )
-                  : Container(color: Colors.black),
+                  : Image.network(
+                      widget.videoData.thumbnailUrl,
+                      fit: BoxFit.cover,
+                    ),
             ),
             Positioned.fill(
               child: GestureDetector(
@@ -230,9 +231,9 @@ class VideoPostState extends ConsumerState<VideoPost>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "@니꼬",
-                    style: TextStyle(
+                  Text(
+                    "@${widget.videoData.creator}",
+                    style: const TextStyle(
                       fontSize: Sizes.size20,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -242,16 +243,16 @@ class VideoPostState extends ConsumerState<VideoPost>
                   Row(
                     children: [
                       Text(
-                        widget._hasMore && !_seeMore
-                            ? "${widget.description.substring(0, 15)}..."
-                            : widget.description,
+                        _hasMore && !_seeMore
+                            ? "${widget.videoData.description.substring(0, 15)}..."
+                            : widget.videoData.description,
                         style: const TextStyle(
                           fontSize: Sizes.size16,
                           color: Colors.white,
                         ),
                       ),
-                      if (widget._hasMore && !_seeMore) Gaps.h05,
-                      if (widget._hasMore && !_seeMore)
+                      if (_hasMore && !_seeMore) Gaps.h05,
+                      if (_hasMore && !_seeMore)
                         GestureDetector(
                           onTap: _onTapSeeMore,
                           child: const Text(
@@ -272,33 +273,33 @@ class VideoPostState extends ConsumerState<VideoPost>
               right: Sizes.size12,
               child: Column(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 25,
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                     foregroundImage: NetworkImage(
-                      ExampleImage.profile1,
+                      "https://firebasestorage.googleapis.com/v0/b/tiktok-aroxima.appspot.com/o/avatars%2F${widget.videoData.creatorUid}?alt=media",
                     ),
                     child: Text(
-                      "니꼬",
+                      "@${widget.videoData.creator}",
                     ),
                   ),
                   Gaps.v20,
-                  const VideoButton(
-                    icon: FontAwesomeIcons.solidHeart,
-                    text: "2.9M",
+                  VideoButton(
+                    icon: Icons.favorite,
+                    text: "${widget.videoData.likes}",
                   ),
                   Gaps.v20,
                   GestureDetector(
                     onTap: () => _onTapComments(context),
-                    child: const VideoButton(
-                      icon: FontAwesomeIcons.solidComment,
-                      text: "33K",
+                    child: VideoButton(
+                      icon: Icons.comment,
+                      text: "${widget.videoData.comments}",
                     ),
                   ),
                   Gaps.v20,
                   const VideoButton(
-                    icon: FontAwesomeIcons.share,
+                    icon: Icons.share,
                     text: "Share",
                   )
                 ],

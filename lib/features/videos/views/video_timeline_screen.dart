@@ -63,6 +63,7 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
             ),
           ),
           data: (List<VideoModel> videos) {
+            print(videos);
             return RefreshIndicator(
               onRefresh: _onRefresh,
               displacement: 50,
@@ -73,12 +74,14 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
                 itemCount: videos.length,
                 onPageChanged: _onPageChanged,
                 // pageSnapping: false,
-                itemBuilder: (context, index) => VideoPost(
-                  onVideoFinished: _onVideoFinished,
-                  index: index,
-                  description:
-                      "This is my house in Thailand!!! wow wow wow wow wow wow",
-                ),
+                itemBuilder: (context, index) {
+                  final videoData = videos[index];
+                  return VideoPost(
+                    onVideoFinished: _onVideoFinished,
+                    index: index,
+                    videoData: videoData,
+                  );
+                },
               ),
             );
           },

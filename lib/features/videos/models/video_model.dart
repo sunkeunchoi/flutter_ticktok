@@ -46,19 +46,6 @@ class VideoModel {
     );
   }
 
-  factory VideoModel.empty() {
-    return VideoModel(
-      title: "",
-      description: "",
-      fileUrl: "",
-      thumbnailUrl: "",
-      creatorUid: "",
-      creator: "",
-      likes: 0,
-      comments: 0,
-      createdAt: DateTime.now().microsecondsSinceEpoch,
-    );
-  }
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
