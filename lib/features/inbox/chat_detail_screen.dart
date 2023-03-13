@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
+import 'package:flutter_ticktoc/features/authentication/repositories/authentication_repository.dart';
+import 'package:flutter_ticktoc/features/inbox/view_models/messages_view_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ChatDetailScreen extends StatefulWidget {
+class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({super.key, required this.chatId});
   static const routeName = "chatDetail";
   static const routeURL = ":chatId";
@@ -12,12 +15,27 @@ class ChatDetailScreen extends StatefulWidget {
       MaterialPageRoute(builder: (context) => ChatDetailScreen(chatId: chatId));
   final String chatId;
   @override
-  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+  ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
 
-class _ChatDetailScreenState extends State<ChatDetailScreen> {
+class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
+  late final TextEditingController _controller = TextEditingController();
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onSendPressed() {
+    final text = _controller.text;
+    if (text.isEmpty) return;
+    ref.read(messageProvider.notifier).sendMessage(text);
+    _controller.text = "";
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(messageProvider).isLoading;
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -81,101 +99,141 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       ),
       body: Stack(
         children: [
-          ListView.separated(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.size20,
-              horizontal: Sizes.size14,
-            ),
-            itemCount: 10,
-            separatorBuilder: (context, index) => Gaps.v10,
-            itemBuilder: (context, index) {
-              final isMine = index % 3 == 0;
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment:
-                    isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(
-                      Sizes.size14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isMine
-                          ? Colors.blueAccent
-                          : Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(
-                          Sizes.size20,
-                        ),
-                        topRight: const Radius.circular(
-                          Sizes.size20,
-                        ),
-                        bottomRight: Radius.circular(
-                          !isMine ? Sizes.size20 : Sizes.size05,
-                        ),
-                        bottomLeft: Radius.circular(
-                          isMine ? Sizes.size20 : Sizes.size05,
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      "This is a message",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Sizes.size16,
-                      ),
-                    ),
+          ref.watch(chatProvider).when(
+                error: (error, stackTrace) => Center(
+                  child: Text(
+                    error.toString(),
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+                loading: () => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+                data: (data) {
+                  return ListView.separated(
+                    reverse: true,
+                    padding: EdgeInsets.only(
+                      top: 24,
+                      left: 12,
+                      right: 12,
+                      bottom: MediaQuery.of(context).padding.bottom + 108,
+                    ),
+                    itemCount: data.length,
+                    separatorBuilder: (context, index) => Gaps.v10,
+                    itemBuilder: (context, index) {
+                      final message = data[index];
+                      final isMine =
+                          message.userId == ref.watch(authRepository).uid!;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: isMine
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(
+                              Sizes.size14,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isMine
+                                  ? Colors.blueAccent
+                                  : Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(
+                                  Sizes.size20,
+                                ),
+                                topRight: const Radius.circular(
+                                  Sizes.size20,
+                                ),
+                                bottomRight: Radius.circular(
+                                  !isMine ? Sizes.size20 : Sizes.size05,
+                                ),
+                                bottomLeft: Radius.circular(
+                                  isMine ? Sizes.size20 : Sizes.size05,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              message.text,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: Sizes.size16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
           Positioned(
             bottom: 0,
             width: MediaQuery.of(context).size.width,
             child: BottomAppBar(
-                padding: const EdgeInsets.only(
-                  left: Sizes.size20,
-                  top: Sizes.size10,
-                  bottom: Sizes.size10,
-                  right: Sizes.size10,
-                ),
-                color: Colors.grey.shade500,
-                child: Row(
-                  children: [
-                    const Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Send a message...",
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: Sizes.size10,
-                            ),
-                            child: FaIcon(
-                              FontAwesomeIcons.faceSmile,
-                              color: Colors.black,
-                            ),
+              padding: const EdgeInsets.only(
+                left: Sizes.size20,
+                top: Sizes.size10,
+                bottom: Sizes.size10,
+                right: Sizes.size10,
+              ),
+              color: Theme.of(context).colorScheme.surface,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      decoration: InputDecoration(
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.primary,
+                        hintText: "Send a message...",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: IconButton(
+                          color: Colors.white,
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.emoji_emotions,
                           ),
                         ),
                       ),
                     ),
-                    Gaps.h20,
-                    Container(
-                      width: Sizes.size44,
-                      height: Sizes.size44,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: const Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.paperPlane,
-                        ),
-                      ),
+                  ),
+                  Gaps.h20,
+                  IconButton(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    icon: Icon(
+                      isLoading ? Icons.hourglass_top : Icons.send,
                     ),
-                  ],
-                )),
-          ),
+                    onPressed: isLoading ? null : _onSendPressed,
+                  )
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
