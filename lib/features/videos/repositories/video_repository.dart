@@ -37,8 +37,10 @@ class VideoRepository {
     }
   }
 
-  Future<void> toggleVideoLike(
-      {required String videoId, required String userId}) async {
+  Future<void> toggleVideoLike({
+    required String videoId,
+    required String userId,
+  }) async {
     final query = _db.collection("likes").doc("${videoId}_$userId");
     final like = await query.get();
     if (!like.exists) {
@@ -48,6 +50,15 @@ class VideoRepository {
     } else {
       await query.delete();
     }
+  }
+
+  Future<bool> isLikedVideo({
+    required String videoId,
+    required String userId,
+  }) async {
+    final query = _db.collection("likes").doc("${videoId}_$userId");
+    final like = await query.get();
+    return like.exists;
   }
 }
 
