@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_ticktoc/assets/image.dart';
 import 'package:flutter_ticktoc/constants/gaps.dart';
 import 'package:flutter_ticktoc/constants/sizes.dart';
+import 'package:flutter_ticktoc/features/inbox/view_models/messages_view_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ChatDetailScreen extends StatefulWidget {
+class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({super.key, required this.chatId});
   static const routeName = "chatDetail";
   static const routeURL = ":chatId";
@@ -12,12 +14,27 @@ class ChatDetailScreen extends StatefulWidget {
       MaterialPageRoute(builder: (context) => ChatDetailScreen(chatId: chatId));
   final String chatId;
   @override
-  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+  ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
 
-class _ChatDetailScreenState extends State<ChatDetailScreen> {
+class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
+  late final TextEditingController _controller = TextEditingController();
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onSendPressed() {
+    final text = _controller.text;
+    if (text.isEmpty) return;
+    ref.read(messageProvider.notifier).sendMessage(text);
+    _controller.text = "";
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(messageProvider).isLoading;
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -143,36 +160,29 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 color: Colors.grey.shade500,
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: TextField(
+                        controller: _controller,
                         decoration: InputDecoration(
                           hintText: "Send a message...",
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: Sizes.size10,
-                            ),
-                            child: FaIcon(
-                              FontAwesomeIcons.faceSmile,
-                              color: Colors.black,
+                          suffixIcon: IconButton(
+                            color: Colors.white,
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.emoji_emotions,
                             ),
                           ),
                         ),
                       ),
                     ),
                     Gaps.h20,
-                    Container(
-                      width: Sizes.size44,
-                      height: Sizes.size44,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
+                    IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        isLoading ? Icons.hourglass_top : Icons.send,
                       ),
-                      child: const Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.paperPlane,
-                        ),
-                      ),
-                    ),
+                      onPressed: isLoading ? null : _onSendPressed,
+                    )
                   ],
                 )),
           ),
