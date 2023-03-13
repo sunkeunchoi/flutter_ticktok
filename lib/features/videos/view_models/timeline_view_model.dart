@@ -1,27 +1,49 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_ticktoc/features/videos/repositories/video_repository.dart';
 
 import '../models/video_model.dart';
 
 export '../models/video_model.dart';
 
 class TimelineViewModel extends AsyncNotifier<List<VideoModel>> {
-  List<VideoModel> _list = [
-    VideoModel.empty(),
-  ];
-  void uploadVideo() async {
-    state = const AsyncValue.loading();
-    // await Future.delayed(const Duration(seconds: 2));
-    _list = [..._list];
-    state = AsyncValue.data(_list);
-  }
+  late final VideoRepository _repository;
+  List<VideoModel> _list = [];
 
   @override
   FutureOr<List<VideoModel>> build() async {
-    await Future.delayed(const Duration(seconds: 5));
-    // throw Exception("OMG failed to fetch");
+    _repository = ref.read(videoRepository);
+    _list = await _fetchVideos();
     return _list;
+  }
+
+  Future<List<VideoModel>> _fetchVideos({int? lastItemCreatedAt}) async {
+    final result = await _repository.fetchVideos(
+      lastItemCreatedAt: lastItemCreatedAt,
+    );
+    return result.docs
+        .map(
+          (doc) => VideoModel.fromMap(
+            map: doc.data(),
+            videoId: doc.id,
+          ),
+        )
+        .toList();
+  }
+
+  Future<void> fetchNextPage() async {
+    final newList = await _fetchVideos(
+      lastItemCreatedAt: _list.last.createdAt,
+    );
+
+    _list = [..._list, ...newList];
+    state = AsyncValue.data(_list);
+  }
+
+  Future<void> refresh() async {
+    _list = await _fetchVideos();
+    state = AsyncValue.data(_list);
   }
 }
 
