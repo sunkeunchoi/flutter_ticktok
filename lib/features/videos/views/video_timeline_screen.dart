@@ -29,9 +29,7 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   }
 
   Future<void> _onRefresh() {
-    return Future.delayed(
-      const Duration(seconds: 5),
-    );
+    return ref.read(timelineProvider.notifier).refresh();
   }
 
   void _onVideoFinished() {

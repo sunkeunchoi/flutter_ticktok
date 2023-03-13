@@ -37,6 +37,11 @@ class TimelineViewModel extends AsyncNotifier<List<VideoModel>> {
     _list = [..._list, ...newList];
     state = AsyncValue.data(_list);
   }
+
+  Future<void> refresh() async {
+    _list = await _fetchVideos();
+    state = AsyncValue.data(_list);
+  }
 }
 
 final timelineProvider =
